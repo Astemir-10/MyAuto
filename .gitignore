@@ -1,0 +1,86 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode
+*.xcworkspace/
+*.xcuserstate
+*.xccheckout
+*.xcscmblueprint
+
+# Build
+build/
+DerivedData/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
+/.build
+/Packages/
+/*.xcodeproj/project.xcworkspace/
+
+# CocoaPods
+Pods/
+*.xcworkspace
+
+# Carthage
+Carthage/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+fastlane/report.html
+
+# Firebase
+GoogleService-Info.plist
+
+# Secrets
+*.key
+*.pem
+*.crt
+*.p12
+*.mobileprovision
+*.xcconfig
+
+# Environment
+.env
+.env.*
+
+# Logs
+*.log
+*.lock
+
+# Editor-specific
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Ignore compiled files
+*.o
+*.a
+*.so
+*.lo
+*.la
+
+# Ignore temporary files
+*.tmp
+*.cache
+*.pid
+
+# Ignore database files (если используются локально)
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+
+# Ignore coverage reports
+coverage/
+*.cover
+*.gcda
+*.gcno
+*.gcov
