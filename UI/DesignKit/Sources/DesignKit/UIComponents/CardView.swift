@@ -10,22 +10,15 @@ import DesignTokens
 
 public final class CardView: UIView {
     public struct CardViewConfiguration {
+        public var cornerRadius: CGFloat = 20
         public var spacing: CGFloat = 16
+        public var level: Int = 1
         public var edgeInsets: UIEdgeInsets = .init(top: 20, left: 20, bottom: 20, right: 20)
     }
     
     private lazy var contentStackView = UIStackView()
     private var configuration = CardViewConfiguration()
     private var contentConstraints = [NSLayoutConstraint]()
-    
-    public var isSecondLevel: Bool = false {
-        didSet {
-            if isSecondLevel {
-                layer.shadowColor = UIColor.clear.cgColor
-                self.backgroundColor = .appColors.ui.primaryAlternativeSecondary
-            }
-        }
-    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -48,11 +41,17 @@ public final class CardView: UIView {
     }
     
     private func configureShadow() {
-        layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOpacity = 0.1
-        layer.shadowOffset = CGSize(width: 0, height: 4)
-        layer.shadowRadius = 15
-        layer.cornerRadius = 10
+        if configuration.level == 2 {
+            layer.shadowOpacity = 0
+        } else if configuration.level == 3 {
+            layer.shadowOpacity = 0
+        } else {
+            layer.shadowColor = UIColor.black.cgColor
+            layer.shadowOpacity = 0.08
+            layer.shadowOffset = CGSize(width: 0, height: 4)
+            layer.shadowRadius = 12
+            layer.cornerRadius = 10
+        }
     }
 
     public func configure(_ configuration: (inout CardViewConfiguration) -> ()) {
@@ -71,6 +70,19 @@ public final class CardView: UIView {
             .bottom(-self.configuration.edgeInsets.bottom),
         ])
         self.contentStackView.spacing = configuration.spacing
+        self.layer.cornerRadius = configuration.cornerRadius
+        
+        
+        if configuration.level == 2 {
+            layer.shadowColor = UIColor.clear.cgColor
+            self.backgroundColor = .appColors.ui.primaryAlternativeSecondary
+        }
+        
+        if configuration.level == 3 {
+            layer.shadowColor = UIColor.clear.cgColor
+            self.backgroundColor = .appColors.ui.primaryAlternativeThirdty
+        }
+        
         configureShadow()
     }
     

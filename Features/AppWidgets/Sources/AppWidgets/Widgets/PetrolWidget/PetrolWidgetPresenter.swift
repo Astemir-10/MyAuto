@@ -114,7 +114,7 @@ public struct PetrolWidgetInfoModel {
 }
 
 struct PetrolWidgetModel {
-    let perrols: [PetrolWidgetInfoModel]
+    let petrols: [PetrolWidgetInfoModel]
 }
 
 final class PetrolWidgetPresenter {
@@ -187,7 +187,7 @@ final class PetrolWidgetPresenter {
             petrols.append(gazpromModel)
         }
         
-        self.petrolWidget = PetrolWidgetModel(perrols: petrols)
+        self.petrolWidget = PetrolWidgetModel(petrols: petrols)
         if let petrolWidget = self.petrolWidget {
             self.view?.setState(.loaded(data: petrolWidget))
             self.widgetOutput?.widgetIsLoaded(widgetType: .petrol)

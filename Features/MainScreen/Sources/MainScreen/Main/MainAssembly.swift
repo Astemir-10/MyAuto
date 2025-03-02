@@ -23,6 +23,8 @@ public enum MainAssembly {
         let weatherWidget = WeatherWidgetAssembly.assembly(widgetOutput: presenter)
         mainViewController.petrolWidget = petrolWidget
         mainViewController.weatherWidget = weatherWidget
+        let mainCar = MainCarInfoAssembly.assembly()
+        mainViewController.mainCarInfoViewController = mainCar
         return navigationController
     }
 }

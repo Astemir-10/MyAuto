@@ -67,6 +67,11 @@ public final class MainViewController: CommonViewController {
         weatherWidget.view
     }
     
+    var mainCarInfoViewController: UIViewController!
+    var mainCarInfoView: UIView {
+        mainCarInfoViewController.view
+    }
+    
     // MARK: UIScrollView
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView().forAutoLayout()
@@ -91,38 +96,75 @@ public final class MainViewController: CommonViewController {
     }
     
     private func setupUI() {
+        navigationController?.setNavigationBarHidden(true, animated: false)
         view.backgroundColor = .appColors.ui.main
-//        view.addSubview(collectionView)
-//        collectionView.addConstraintToSuperView([.top(0), .leading(0), .trailing(0), .bottom(0)], withSafeArea: true)
-//        applyInitialSnapshot()
         self.addChildVCSimple(petrolWidget)
         self.addChildVCSimple(weatherWidget)
+        self.addChildVCSimple(mainCarInfoViewController)
         collectionView.contentInset = .init(top: 0, left: 0, bottom: 100, right: 0)
         self.view.addSubview(scrollView)
-        scrollView.addConstraintToSuperView([.leading(8),
-                                             .bottom(-8),
-                                             .top(8),
-                                             .trailing(-8)],
+        scrollView.addConstraintToSuperView([.leading(0),
+                                             .bottom(0),
+                                             .top(0),
+                                             .trailing(0)],
                                             withSafeArea: true)
         scrollView.addSubview(contentStackView)
         contentStackView.addConstraintToSuperView([.leading(0), .bottom(0), .top(0), .trailing(0)])
-        contentStackView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -16).activated()
+        scrollView.showsVerticalScrollIndicator = false
         
-        contentStackView.addArrangedSubviews(makeWidgetWithHeader(header: "Бензин", view: petrolWidgetView),
-                                             makeWidgetWithHeader(header: "Погода", view: weatherWidgetView))
         
-
+        contentStackView.addArrangedSubviews(makeWidgetWithHeader(header: nil, view: mainCarInfoView),
+                                             makeWidgetWithHeader(header: "Бензин", view: petrolWidgetView, rightViewItem: ("Еще", {
+            print("OKOKOKO")
+        }))
+//                                             makeWidgetWithHeader(header: "Погода", view: weatherWidgetView))
+                                             )
+        mainCarInfoView.widthAnchor.constraint(equalTo: contentStackView.widthAnchor).activated()
+        petrolWidgetView.widthAnchor.constraint(equalTo: contentStackView.widthAnchor).activated()
+        contentStackView.widthAnchor.constraint(equalTo: view.widthAnchor).activated()
+        contentStackView.spacing = 20
     }
     
-    private func makeWidgetWithHeader(header: String, view: UIView) -> UIView {
+    private func makeWidgetWithHeader(header: String?, view: UIView, rightViewItem: (String, () -> ())? = nil) -> UIView {
         let stackView = UIStackView()
+        let headerRightStackView = UIStackView()
+        headerRightStackView.axis = .horizontal
         stackView.axis = .vertical
         let headerView = HeaderView()
         headerView.configure { configuration in
             configuration.edgeInsets = .init(top: 12, left: 0, bottom: 12, right: 0)
         }
-        headerView.set(title: header)
-        stackView.addArrangedSubviews([headerView, view])
+        headerRightStackView.addArrangedSubview(headerView)
+        
+        
+        if let rightViewItem {
+            let button = Button()
+            
+            button.setSize(.medium)
+            button.primaryText = rightViewItem.0
+            button.addAction(.init(handler: { _ in
+                rightViewItem.1()
+            }), for: .touchUpInside)
+            headerRightStackView.addArrangedSubview(button)
+            button.configure { config in
+                config.backgroundColor = .clear
+                config.primaryTextColor = .appColors.text.blue
+                config.primaryFont = .appFonts.secondaryButton
+                config.needShadow = false
+            }
+            headerRightStackView.distribution = .equalSpacing
+        }
+        
+        
+        
+        if let header {
+            headerView.set(title: header)
+            stackView.addArrangedSubviews([headerRightStackView])
+            headerRightStackView.widthAnchor.constraint(equalTo: stackView.widthAnchor, constant: -32).activated()
+        }
+        stackView.addArrangedSubviews([view])
+        stackView.alignment = .center
+        stackView.spacing = 8
         return stackView
     }
     

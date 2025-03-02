@@ -108,7 +108,8 @@ extension MainViewController {
             switch sectionIdentifier {
                 
             case .carWidget:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainCarWidgetCell.identifier, for: indexPath)
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainCarWidgetCell.identifier, for: indexPath) as! MainCarWidgetCell
+                cell.setContentView(view: mainCarInfoView)
                 return cell
             case .categories:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
@@ -152,7 +153,7 @@ extension MainViewController {
             
             switch sectionIdentifier {
             case .carWidget:
-                break
+                headerView?.setTitle(title: "Автомобиль")
             case .categories:
                 break
             case .petrolWidget:

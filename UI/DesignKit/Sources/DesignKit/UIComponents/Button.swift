@@ -164,6 +164,10 @@ public final class Button: UIControl {
         }
         if configuration.needShadow {
             configureShadow()
+        } else {
+            if self.backgroundColor == .clear {
+                layer.shadowOpacity = 0
+            }
         }
         
         topConstraint?.constant = configuration.contentInsets.top
@@ -177,6 +181,7 @@ public final class Button: UIControl {
         imageBottomConstraint?.constant = -configuration.contentInsets.bottom
         
         self.imageView.tintColor = configuration.primaryTextColor
+        
     }
     
     public func configure(_ configuration: (inout ButtonConfiguration) -> ()) {

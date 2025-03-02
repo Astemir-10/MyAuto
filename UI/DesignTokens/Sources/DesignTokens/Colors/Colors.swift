@@ -26,6 +26,7 @@ public struct AppColors {
     }
     
     public struct UIColors {
+        public let tabBar = TabBar()
         // main light: #ffffff; dark: #000000
         public let main = UIColor.colorBy(named: "main")
         
@@ -46,6 +47,15 @@ public struct AppColors {
         
         // primaryAlternativeSecondary #
         public let primaryAlternativeSecondary = UIColor.colorBy(named: "primaryAlternativeSecondary")
+        
+        public let primaryAlternativeThirdty = UIColor.colorBy(named: "primaryAlternativeThirdty")
+        
+    }
+    
+    public struct TabBar {
+        public let background = UIColor.colorBy(named: "tabBar.background")
+        public let tabSelected = UIColor.colorBy(named: "tabBar.iconSelected")
+        public let tabNormal = UIColor.colorBy(named: "tabBar.iconNormal")
     }
     
     public let text: TextColors = TextColors()

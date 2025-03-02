@@ -9,7 +9,7 @@ import UIKit
 import DesignKit
 
 final class MainCarWidgetCell: UICollectionViewCell {
-    private lazy var cardView: CardView = CardView().forAutoLayout()
+    private lazy var bgView = UIView().forAutoLayout()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -21,11 +21,12 @@ final class MainCarWidgetCell: UICollectionViewCell {
     }
     
     private func setupUI() {
-        self.contentView.addSubview(cardView)
-        cardView.addConstraintToSuperView([.top(0), .leading(0), .trailing(0), .bottom(0)])
-        
-        
-        cardView.backgroundColor = .orange
-        cardView.setSize(height: 100)
+        self.contentView.addSubview(bgView)
+        bgView.addConstraintToSuperView([.bottom(0), .leading(0), .trailing(0), .top(0)])
     }
+    
+    func setContentView(view: UIView) {
+        bgView.addSubview(view.forAutoLayout())
+        view.addConstraintToSuperView([.bottom(0), .leading(0), .trailing(0), .top(0)])
+    }    
 }

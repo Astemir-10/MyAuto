@@ -20,6 +20,9 @@
 		E22A80422CD5B17500ADEB73 /* Search in Frameworks */ = {isa = PBXBuildFile; productRef = E22A80412CD5B17500ADEB73 /* Search */; };
 		E22A80442CD5B17F00ADEB73 /* News in Frameworks */ = {isa = PBXBuildFile; productRef = E22A80432CD5B17F00ADEB73 /* News */; };
 		E22C3E112CD1990D00FC0588 /* MainScreen in Frameworks */ = {isa = PBXBuildFile; productRef = E22C3E102CD1990D00FC0588 /* MainScreen */; };
+		E271DB2D2D71BA9B00B27052 /* Calculator in Frameworks */ = {isa = PBXBuildFile; productRef = E271DB2C2D71BA9B00B27052 /* Calculator */; };
+		E271DB2F2D71BDE500B27052 /* Expenses in Frameworks */ = {isa = PBXBuildFile; productRef = E271DB2E2D71BDE500B27052 /* Expenses */; };
+		E271DB312D71C11E00B27052 /* Documents in Frameworks */ = {isa = PBXBuildFile; productRef = E271DB302D71C11E00B27052 /* Documents */; };
 		E284AE8C2CCD2E160008F5E6 /* CombineCoreData in Frameworks */ = {isa = PBXBuildFile; productRef = E284AE8B2CCD2E160008F5E6 /* CombineCoreData */; };
 		E284AE922CCD2EAD0008F5E6 /* AppData.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = E284AE902CCD2EAD0008F5E6 /* AppData.xcdatamodeld */; };
 		E28F473B2CD1CA8200AB0029 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28F473A2CD1CA8200AB0029 /* MainTabBarViewController.swift */; };
@@ -54,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E271DB2D2D71BA9B00B27052 /* Calculator in Frameworks */,
 				E22A80422CD5B17500ADEB73 /* Search in Frameworks */,
 				E22A80402CD2F32600ADEB73 /* AnyFormatter in Frameworks */,
 				E22A803E2CD2E46100ADEB73 /* Profile in Frameworks */,
@@ -62,7 +66,9 @@
 				E2DCAEF42C9E3262006F4079 /* CarInfo in Frameworks */,
 				E22A80442CD5B17F00ADEB73 /* News in Frameworks */,
 				E2DCAEFA2C9E32EE006F4079 /* AppServices in Frameworks */,
+				E271DB2F2D71BDE500B27052 /* Expenses in Frameworks */,
 				E2DCAEF62C9E3262006F4079 /* GlobalServiceLocator in Frameworks */,
+				E271DB312D71C11E00B27052 /* Documents in Frameworks */,
 				E2DCAEF82C9E32AC006F4079 /* DesignKit in Frameworks */,
 				E284AE8C2CCD2E160008F5E6 /* CombineCoreData in Frameworks */,
 			);
@@ -199,6 +205,9 @@
 				E22A803F2CD2F32600ADEB73 /* AnyFormatter */,
 				E22A80412CD5B17500ADEB73 /* Search */,
 				E22A80432CD5B17F00ADEB73 /* News */,
+				E271DB2C2D71BA9B00B27052 /* Calculator */,
+				E271DB2E2D71BDE500B27052 /* Expenses */,
+				E271DB302D71C11E00B27052 /* Documents */,
 			);
 			productName = MyAuto;
 			productReference = E226BE022C6AAE8800D8F389 /* MyAuto.app */;
@@ -505,6 +514,18 @@
 		E22C3E102CD1990D00FC0588 /* MainScreen */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MainScreen;
+		};
+		E271DB2C2D71BA9B00B27052 /* Calculator */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Calculator;
+		};
+		E271DB2E2D71BDE500B27052 /* Expenses */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Expenses;
+		};
+		E271DB302D71C11E00B27052 /* Documents */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Documents;
 		};
 		E284AE8B2CCD2E160008F5E6 /* CombineCoreData */ = {
 			isa = XCSwiftPackageProductDependency;
