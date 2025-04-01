@@ -36,6 +36,8 @@ public final class HeaderView: UIView {
         return label
     }()
     
+    private lazy var topStackView = UIStackView().forAutoLayout()
+    
     private lazy var contentStackView: UIStackView = {
         let stackView = UIStackView().forAutoLayout()
         stackView.axis = .vertical
@@ -57,20 +59,30 @@ public final class HeaderView: UIView {
     
     private func setupUI() {
         self.addSubview(contentStackView)
+        contentStackView.addArrangedSubview(topStackView)
         updateConfiguration()
+        topStackView.axis = .horizontal
+        topStackView.spacing = 20
+        topStackView.distribution = .equalSpacing
+        topStackView.alignment = .center
     }
     
     public func set(title: String? = nil, subtitle: String? = nil) {
         self.contentStackView.arrangedSubviews.forEach({ $0.removeFromSuperview() })
         if let title {
             self.titlelabel.text = title
-            contentStackView.addArrangedSubview(titlelabel)
+            contentStackView.addArrangedSubview(topStackView)
+            topStackView.insertArrangedSubview(titlelabel, at: 0)
         }
         
         if let subtitle {
             self.subtitlelabel.text = subtitle
             self.contentStackView.addArrangedSubview(subtitlelabel)
         }
+    }
+    
+    public func addRightView(view: UIView) {
+        topStackView.addArrangedSubview(view)
     }
     
     public func configure(_ configuration: (inout HeaderViewConfiguration) -> ()) {

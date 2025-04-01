@@ -29,6 +29,6 @@ final class MainSectionHeader: UICollectionReusableView {
     func setTitle(title: String) {
         headerView.set(title: title)
         self.addSubview(headerView)
-        headerView.addConstraintToSuperView([.top(0), .leading(0), .trailing(0), .bottom(0)])
+        headerView.addFourNullConstraintToSuperView()
     }
 }

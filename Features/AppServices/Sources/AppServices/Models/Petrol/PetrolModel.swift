@@ -183,7 +183,7 @@ public struct PetrolItemModel: Decodable {
     
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-
+        
         self.longitude = Double(try container.decodeIfPresent(String.self, forKey: .longitude) ?? "")
         self.latitude = Double(try container.decodeIfPresent(String.self, forKey: .latitude) ?? "")
         self.poiid = try container.decode(String.self, forKey: .poiid)

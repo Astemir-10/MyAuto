@@ -30,10 +30,19 @@ public extension UIView {
             self.addSubview($0)
         })
     }
+    
     @discardableResult
     func addConstraintToSuperView(_ constraints: [Constraint]) -> [NSLayoutConstraint] {
         guard let superview else { return [] }
         return self.addConstraintTo(view: superview, constraints)
+    }
+    
+    func addConstraintToSuperViewWithMargin(margin: CGFloat) {
+        addConstraintToSuperView([.top(margin), .leading(margin), .trailing(-margin), .bottom(-margin)])
+    }
+    
+    func addFourNullConstraintToSuperView(withSafeArea: Bool = false){
+        self.addConstraintToSuperView([.top(0), .leading(0), .trailing(0), .bottom(0)], withSafeArea: withSafeArea)
     }
     
     @discardableResult

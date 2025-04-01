@@ -21,6 +21,7 @@ protocol PetrolWidgetViewInput: WidgetViewInput {
 
 protocol PetrolWidgetViewOutput {
     func viewDidLoad()
+    func refresh()
     func didTapLocation(item: PetrolWidgetInfoModel)
     func didTapPetrol(item: PetrolWidgetInfoModel)
 }
@@ -39,8 +40,9 @@ public struct PetrolWidgetInfoModel {
     public let dt: Double?
     public let longitude: Double
     public let latitude: Double
+    public let distance: Double
     
-    init(name: String?, image: UIImage?, regionName: String?, cityName: String?, ai92: Double?, ai95: Double?, ai100: Double?, gas: Double?, dt: Double?, longitude: Double, latitude: Double, petrolType: PetrolItemModel.PetrolType?) {
+    init(name: String?, image: UIImage?, regionName: String?, cityName: String?, ai92: Double?, ai95: Double?, ai100: Double?, gas: Double?, dt: Double?, longitude: Double, latitude: Double, petrolType: PetrolItemModel.PetrolType?, distance: Double) {
         self.name = name
         self.image = image
         self.ai92 = ai92
@@ -53,9 +55,10 @@ public struct PetrolWidgetInfoModel {
         self.longitude = longitude
         self.latitude = latitude
         self.petrolType = petrolType
+        self.distance = distance
     }
     
-    init(_ item: PetrolItemModel, longitude: Double, latitude: Double) {
+    init(_ item: PetrolItemModel, longitude: Double, latitude: Double, distance: Double) {
         self.name = item.petrol?.name
         self.ai92 = item.ai92
         self.ai95 = item.ai95
@@ -67,6 +70,7 @@ public struct PetrolWidgetInfoModel {
         self.petrolType = item.petrol
         self.regionName = item.regionName
         self.cityName = item.cityName
+        self.distance = distance
         if let petrol = item.petrol {
             
             switch petrol {
@@ -83,7 +87,7 @@ public struct PetrolWidgetInfoModel {
         
     }
     
-    init(_ item: PetrolItemModel) {
+    init(_ item: PetrolItemModel, distance: Double) {
         self.name = item.petrol?.name
         self.ai92 = item.ai92
         self.ai95 = item.ai95
@@ -95,6 +99,7 @@ public struct PetrolWidgetInfoModel {
         self.petrolType = item.petrol
         self.regionName = item.regionName
         self.cityName = item.cityName
+        self.distance = distance
         if let petrol = item.petrol {
             
             switch petrol {
@@ -163,6 +168,7 @@ final class PetrolWidgetPresenter {
             })
             .sink(receiveError: { [weak self] error in
                 self?.view?.setState(.error)
+                self?.widgetOutput?.endRefresh(widget: .petrol)
             }, receiveValue: { [weak self] petrols in
                 self?.processPetrolModels(petrols, geoInfo: geoInfo)
             })
@@ -171,8 +177,9 @@ final class PetrolWidgetPresenter {
     
     private func processPetrolModels(_ petrolModels: [PetrolItemModel], geoInfo: GeoInfo) {
         let currentLocation = CLLocationCoordinate2D(latitude: geoInfo.latitude, longitude: geoInfo.longitude)
-        
-        let allItems: [PetrolWidgetInfoModel] = petrolModels.filter({ $0.ai100 != nil || $0.ai92 != nil || $0.ai95 != nil || $0.gas != nil || $0.dt != nil }).map({ PetrolWidgetInfoModel.init($0) })
+        let userLocation = CLLocation(latitude: geoInfo.latitude, longitude: geoInfo.longitude)
+        let allItems: [PetrolWidgetInfoModel] = petrolModels.filter({ $0.ai100 != nil || $0.ai92 != nil || $0.ai95 != nil || $0.gas != nil || $0.dt != nil }).map({
+            return PetrolWidgetInfoModel.init($0, distance: userLocation.distance(from: .init(latitude: $0.latitude ?? 0, longitude: $0.longitude ?? 0))) })
         var petrols: [PetrolWidgetInfoModel] = []
         
         if let lukoilModel = self.getPetrol(userLocation: currentLocation, petrols: allItems.filter({ $0.petrolType == .lukoil })) {
@@ -192,12 +199,13 @@ final class PetrolWidgetPresenter {
             self.view?.setState(.loaded(data: petrolWidget))
             self.widgetOutput?.widgetIsLoaded(widgetType: .petrol)
         }
+        self.widgetOutput?.endRefresh(widget: .petrol)
         self.items = allItems
     }
     
     private func getPetrol(userLocation: CLLocationCoordinate2D, petrols: [PetrolWidgetInfoModel]) -> PetrolWidgetInfoModel? {
         let coordinates = petrols.compactMap({
-            CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)
+            return CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)
         })
         
         guard let petrolLocation = self.locationManager.findClosestCoordinate(to: userLocation, from: coordinates), let petrolModel = petrols.first(where: {
@@ -228,6 +236,12 @@ extension PetrolWidgetPresenter: PetrolWidgetViewOutput {
         self.locationManager.delegate = self
         locationManager.start(.authorizedAlways)
     }
+    
+    func refresh() {
+        needRequestPetrol = true
+        self.view?.setState(.loading)
+        locationManager.start(.authorizedAlways)
+    }
 }
 
 extension PetrolWidgetPresenter: LocationManagerDelegate {
@@ -250,4 +264,8 @@ extension PetrolWidgetPresenter: LocationManagerDelegate {
             self.view?.setState(.error)
         }
     }
+}
+
+extension PetrolWidgetPresenter: WidgetInput {
+    
 }

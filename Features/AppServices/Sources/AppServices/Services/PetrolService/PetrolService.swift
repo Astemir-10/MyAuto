@@ -13,7 +13,7 @@ import Extensions
 extension URL {
     enum Path: String {
         case petrol, regions, prices
-        case weather, getWeather
+        case weather, getWeather, getHourlyWeather
     }
     
     func appendApiPath(_ paths: Path...) -> URL {
@@ -24,7 +24,6 @@ extension URL {
         paths.forEach({
             components.path.append("/" + $0.rawValue)
         })
-        print(components.url)
         return components.url!
     }
 }

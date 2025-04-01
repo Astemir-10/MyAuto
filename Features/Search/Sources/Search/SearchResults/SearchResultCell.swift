@@ -8,7 +8,7 @@
 import UIKit
 import DesignKit
 
-final class SearchResultCell: UICollectionViewCell, ConfigurableCell {
+final class SearchResultCell: UICollectionViewCell, SimpleConfigurableCell {
     private lazy var titleLabel = UILabel().forAutoLayout()
     
     override init(frame: CGRect) {
@@ -22,7 +22,7 @@ final class SearchResultCell: UICollectionViewCell, ConfigurableCell {
     
     private func setupUI() {
         self.contentView.addSubview(titleLabel)
-        titleLabel.addConstraintToSuperView([.top(0), .bottom(0), .leading(0), .trailing(0)])
+        titleLabel.addFourNullConstraintToSuperView()
     }
     
     func configure(with item: SearchResultItem) {

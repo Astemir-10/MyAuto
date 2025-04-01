@@ -9,6 +9,103 @@ import UIKit
 import DesignKit
 import AppMap
 import AnyFormatter
+import Skeleton
+
+final class WidgetErrorView: UIView {
+    private lazy var frontStackView = UIStackView().forAutoLayout()
+    private lazy var errorImageView = UIImageView().forAutoLayout()
+    private lazy var errorLabel = UILabel()
+    private lazy var refreshButton = Button()
+    
+    init(errorText: String, refreshAction: @escaping () -> ()) {
+        super.init(frame: .zero)
+        self.errorLabel.text = errorText
+        self.refreshButton.addAction(.init(handler: { _ in
+            refreshAction()
+        }), for: .touchUpInside)
+        setupUI()
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupUI() {
+        self.addSubview(frontStackView)
+        frontStackView.addConstraintToSuperView([.centerX(0), .centerY(0)])
+        frontStackView.addArrangedSubviews(errorImageView, errorLabel, refreshButton)
+        frontStackView.spacing = 8
+        frontStackView.axis = .vertical
+        frontStackView.alignment = .center
+        frontStackView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8).activated()
+        errorImageView.image = .appImages.sfIcons.error.withSize(size: 48, weight: .bold)
+        errorImageView.tintColor = UIColor.red
+        errorImageView.setSize(width: 48, height: 48)
+        frontStackView.addConstraintToSuperView([.top(8), .bottom(-8)])
+        refreshButton.primaryText = "Обновить"
+        
+        errorLabel.font = .appFonts.secondaryLarge
+        errorLabel.textColor = .appColors.text.primary
+        errorLabel.textAlignment = .center
+        errorLabel.numberOfLines = 0
+    }
+
+}
+
+
+final class PetrolSkeletonView: UIView {
+    private lazy var topLeftView = UIView().forAutoLayout()
+    private lazy var topRightView = UIView().forAutoLayout()
+    private lazy var topStackView = UIStackView().forAutoLayout()
+    private lazy var bottomStackView = UIStackView().forAutoLayout()
+    private lazy var contentStackView = UIStackView().forAutoLayout()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupUI() {
+        topLeftView.setSize(width: 150, height: 24)
+        topLeftView.showSkeletonAnimation()
+
+        
+        topRightView.setSize(width: 90, height: 24)
+        topRightView.showSkeletonAnimation()
+        
+        self.addSubviews(contentStackView)
+        contentStackView.addConstraintToSuperView([.top(0), .bottom(0), .trailing(0), .leading(0)])
+        contentStackView.addArrangedSubview(topStackView)
+        topStackView.axis = .horizontal
+        topStackView.distribution = .equalSpacing
+        topStackView.addArrangedSubviews(topLeftView, topRightView)
+        contentStackView.addArrangedSubview(bottomStackView)
+        contentStackView.spacing = 20
+        contentStackView.axis = .vertical
+        bottomStackView.axis = .horizontal
+        bottomStackView.distribution = .fillEqually
+        bottomStackView.spacing = 12
+        for _ in 0...2 {
+            bottomStackView.addArrangedSubview(makeCardSkeleton())
+        }
+    }
+    
+    private func makeCardSkeleton() -> UIView {
+        let view = UIView().forAutoLayout()
+        view.setSize(height: 100)
+        view.showSkeletonAnimation(cornerRadius: 15)
+        return view
+    }
+}
 
 final class PetrolView: UIView {
     private lazy var cardView = CardView().forAutoLayout()
@@ -32,6 +129,11 @@ final class PetrolView: UIView {
     private lazy var pricesScrollView = UIScrollView().forAutoLayout()
     private lazy var contentStackView = UIStackView().forAutoLayout()
     
+    private lazy var rightHeaderItemsStackView = UIStackView()
+    private lazy var leftHeaderItemsStackView = UIStackView()
+    private lazy var skeletonView = PetrolSkeletonView().forAutoLayout()
+   
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -42,36 +144,37 @@ final class PetrolView: UIView {
     }
     
     private func setupUI() {
-        self.addSubview(cardView)
-        
-        cardView.addConstraintToSuperView([.top(0), .bottom(0), .leading(0), .trailing(0)])
         cardView.configure { config in
             config.edgeInsets = .init(top: 12, left: 12, bottom: 12, right: 12)
             config.cornerRadius = 20
         }
         
-        headerStackView.addArrangedSubviews([brandImageView, petrolNameLabel])
-        brandImageView.setSize(width: 24, height: 24)
+        self.addSubview(cardView)
+        
+        cardView.addFourNullConstraintToSuperView()
+        
+        brandImageView.setSize(width: 28, height: 28)
         brandImageView.layer.cornerRadius = 8
         brandImageView.clipsToBounds = true
-        cardView.addContentView(contentView)
         contentView.addSubview(contentStackView)
-        contentStackView.addConstraintToSuperView([.top(0), .leading(0), .trailing(0), .bottom(0)])
+        contentStackView.addFourNullConstraintToSuperView()
         contentStackView.addArrangedSubviews(headerStackView, pricesScrollView)
-
         
+        leftHeaderItemsStackView.addArrangedSubviews(brandImageView, petrolNameLabel)
         headerStackView.axis = .horizontal
         headerStackView.spacing = 12
-        headerStackView.distribution = .fill
+        headerStackView.distribution = .equalSpacing
         headerStackView.alignment = .leading
+        headerStackView.addArrangedSubviews(leftHeaderItemsStackView, rightHeaderItemsStackView)
         
+        leftHeaderItemsStackView.spacing = 12
         pricesScrollView.addSubview(pricesStackView)
         pricesScrollView.setSize(height: 104)
         pricesStackView.axis = .horizontal
         pricesStackView.distribution = .equalSpacing
         pricesStackView.spacing = 20
         pricesStackView.alignment = .fill
-        pricesStackView.addConstraintToSuperView([.top(0), .leading(0), .bottom(0), .trailing(0)])
+        pricesStackView.addFourNullConstraintToSuperView()
         pricesScrollView.widthAnchor.constraint(equalTo: contentStackView.widthAnchor).activated()
         
         contentStackView.axis = .vertical
@@ -83,7 +186,6 @@ final class PetrolView: UIView {
     }
 
     private func makePriceView(name: String, value: String, fullPetrol: String) -> UIView {
-        
         let nameLabel = UILabel()
         nameLabel.text = name
         nameLabel.font = .appFonts.secondaryNeutral
@@ -95,7 +197,6 @@ final class PetrolView: UIView {
         valueLabel.textColor = .appColors.text.primary
         valueLabel.font = .appFonts.neutralSemibold
 
-        
         let cardView = CardView()
         
         cardView.configure { config in
@@ -139,6 +240,9 @@ final class PetrolView: UIView {
     }
     
     func setModel(_ model: PetrolWidgetInfoModel) {
+        self.cardView.removeAllContentSubviews()
+        skeletonView.removeFromSuperview()
+        cardView.addContentView(contentView)
         pricesStackView.arrangedSubviews.forEach({ $0.removeFromSuperview() })
         self.petrolNameLabel.text = model.name
         self.brandImageView.image = model.image
@@ -181,7 +285,41 @@ final class PetrolView: UIView {
                             fullPetrol.format(.currency)))
         }
         
+        rightHeaderItemsStackView.addArrangedSubview(makeRightHeaderItem(distance: model.distance))
+        
         pricesStackView.addArrangedSubviews(petrols.map({ makePriceView(name: $0.0, value: $0.1, fullPetrol: $0.2)}))
+    }
+    
+    func makeRightHeaderItem(distance: Double) -> UIView {
+        let stackView = UIStackView()
+        let imageView = UIImageView().forAutoLayout()
+        imageView.setSize(width: 20,
+                          height: 20)
+        let titleLabel = UILabel().forAutoLayout()
+        titleLabel.text = distance.format(.distance)
+        titleLabel.textColor = .appColors.text.primary
+        titleLabel.font = .appFonts.secondaryMedium
+        stackView.addArrangedSubviews(imageView, titleLabel)
+        stackView.axis = .horizontal
+        stackView.spacing = 8
+        stackView.alignment = .center
+        imageView.tintColor = .appColors.text.blue
+        imageView.contentMode = .scaleAspectFit
+        imageView.image = .appImages.sfIcons.location.icon
+        return stackView
+    }
+    
+    func setLoading() {
+        self.cardView.removeAllContentSubviews()
+        self.cardView.addContentView(skeletonView)
+    }
+    
+    func setError(refreshAction: @escaping () -> ()) {
+        let errorView = WidgetErrorView(errorText: "Не смогли загрузить данные об АЗС", refreshAction: {
+            refreshAction()
+        }).forAutoLayout()
+        self.cardView.removeAllContentSubviews()
+        self.cardView.addContentView(errorView)
     }
 }
 
@@ -207,10 +345,20 @@ extension PetrolWidgetView: PetrolWidgetViewInput, UIGestureRecognizerDelegate {
     func setState(_ state: WidgetState) {
         switch state {
         case .error:
-            break
+            contentStackView.arrangedSubviews.forEach({ $0.removeFromSuperview() })
+            let view = PetrolView()
+            view.setError { [weak self] in
+                self?.output.refresh()
+            }
+            contentStackView.addArrangedSubview(view)
+
         case .loading:
-            break
+            contentStackView.arrangedSubviews.forEach({ $0.removeFromSuperview() })
+            let view = PetrolView()
+            view.setLoading()
+            contentStackView.addArrangedSubview(view)
         case .loaded(let data):
+            contentStackView.arrangedSubviews.forEach({ $0.removeFromSuperview() })
             if let data = data as? PetrolWidgetModel {
                 data.petrols.forEach({ item in
                     let view = PetrolView()
@@ -221,6 +369,7 @@ extension PetrolWidgetView: PetrolWidgetViewInput, UIGestureRecognizerDelegate {
                    
                     contentStackView.addArrangedSubview(view)
                 })
+                
             }
         }
     }

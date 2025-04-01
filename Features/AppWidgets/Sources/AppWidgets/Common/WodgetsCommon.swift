@@ -17,6 +17,11 @@ public enum WidgetType: Int {
 
 public protocol WidgetOutput: AnyObject {
     func widgetIsLoaded(widgetType: WidgetType)
+    func endRefresh(widget: WidgetType)
+}
+
+public protocol WidgetInput: AnyObject {
+    func refresh()
 }
 
 

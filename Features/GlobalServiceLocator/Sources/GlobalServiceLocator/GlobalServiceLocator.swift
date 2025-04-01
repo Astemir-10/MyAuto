@@ -10,6 +10,7 @@ import AppServices
 import Networking
 import CombineCoreData
 import LocationManager
+import AppFileManager
 
 public final class GlobalServiceLocator {
     public static let shared = GlobalServiceLocator()
@@ -103,6 +104,19 @@ public final class GlobalServiceLocator {
             let geocoderService = GeocoderServiceImpl(sessionManager: getService())
             self.geocoderService = geocoderService
             return geocoderService
+        }
+    }
+    
+    // MARK: AppFileManager
+    public var appFileManager: AppFileManager?
+    
+    public func getService() -> AppFileManager {
+        if let appFileManager {
+            return appFileManager
+        } else {
+            let appFileManager = AppFileManager()
+            self.appFileManager = appFileManager
+            return appFileManager
         }
     }
 }

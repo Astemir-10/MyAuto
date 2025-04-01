@@ -30,13 +30,60 @@ public extension DateFormatter {
         dateFormatter.dateFormat = "yyyy-MM-dd"
         return dateFormatter
     }
+    
+    static var dateNameFormatter: DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = .init(identifier: "ru_RU")
+        dateFormatter.dateFormat = "d MMM, EEEE"
+        return dateFormatter
+    }
+    
+    static var simpleFormatter: DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = .init(identifier: "ru_RU")
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        return dateFormatter
+    }
+    
+    // ISO8601
+    static var iso8601: DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = .init(identifier: "ru_RU")
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm"
+        return dateFormatter
+    }
+    
+    static var timeFormatter: DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = .init(identifier: "ru_RU")
+        dateFormatter.dateFormat = "HH:mm"
+        return dateFormatter
+    }
+    
 }
 
 public extension Date {
+    func toString(dateForamtter: DateFormatter) -> String {
+        dateForamtter.string(from: self)
+    }
+  
+    
     static func weatherApi(dateStr: String) -> Date? {
         DateFormatter.weatherApiDateFormatter.date(from: dateStr)
     }
+    
+    var dateToString: String {
+        DateFormatter.dateNameFormatter.string(from: self)
+    }
 }
+
+
+public extension String {
+    func toDate(dateForamtter: DateFormatter) -> Date? {
+        dateForamtter.date(from: self)
+    }
+}
+
 
 
 

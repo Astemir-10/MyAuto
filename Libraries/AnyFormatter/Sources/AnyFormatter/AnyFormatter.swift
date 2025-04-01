@@ -10,7 +10,7 @@ import Foundation
 class AnyFormatter {}
 
 public enum MeasurementUnit {
-    case currency, fuelPrice, mileage, distance, travelTime, seconds, horsepower, speed, liters
+    case currency, fuelPrice, mileage, distance, travelTime, time, horsepower, speed, liters, temperature
 }
 
 extension NumberFormatter {
@@ -56,7 +56,8 @@ public extension Double {
         case .mileage:
             return "\(NumberFormatter.formatThousandSeparator(Int(self))) км"
         case .distance:
-            return self < 1.0 ? "\(Int(self * 1000)) м" : "\(NumberFormatter.distanceFormatter.string(from: NSNumber(value: self)) ?? "-") км"
+            let distanceKilometr = self / 1000
+            return self < 1.0 ? "\(Int(distanceKilometr)) м" : "\(NumberFormatter.distanceFormatter.string(from: NSNumber(value: distanceKilometr)) ?? "-") км"
         case .travelTime:
             let minutes = Int(self)
             if minutes < 60 {
@@ -66,14 +67,31 @@ public extension Double {
                 let mins = minutes % 60
                 return mins == 0 ? "\(hours) ч" : "\(hours) ч \(mins) мин"
             }
-        case .seconds:
-            return "\(Int(self)) сек"
+        case .time:
+            let totalSeconds = Int(self)
+            let hours = totalSeconds / 3600
+            let minutes = (totalSeconds % 3600) / 60
+            let seconds = totalSeconds % 60
+            
+            if hours > 0 {
+                return minutes == 0 ? "\(hours) ч" : "\(hours) ч \(minutes) мин"
+            } else if minutes > 0 {
+                return seconds == 0 ? "\(minutes) мин" : "\(minutes) мин \(seconds) сек"
+            } else {
+                return "\(seconds) сек"
+            }
         case .horsepower:
             return "\(Int(self)) л.с."
         case .speed:
             return "\(Int(self)) км/ч"
         case .liters:
             return "\(Int(self)) л"
+        case .temperature:
+            if self < 0 {
+                return "- \(Int(self)) °C"
+            } else {
+                return "\(Int(self)) °C"
+            }
         }
     }
 }

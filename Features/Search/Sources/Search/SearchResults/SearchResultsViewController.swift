@@ -35,7 +35,7 @@ final class SearchResultsViewController: CommonViewController {
         super.viewDidLoad()
         output.viewDidLoad()
         self.view.addSubview(collectionView)
-        collectionView.addConstraintToSuperView([.top(0), .bottom(0), .trailing(0), .leading(0)], withSafeArea: true)
+        collectionView.addFourNullConstraintToSuperView(withSafeArea: true)
         configureSearchView()
 
     }

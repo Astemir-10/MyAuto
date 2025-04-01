@@ -60,6 +60,7 @@ class MainCarInfoViewController: UIViewController {
 
     private lazy var carLogoView = {
         let imageView = UIImageView().forAutoLayout()
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
@@ -162,7 +163,7 @@ class MainCarInfoViewController: UIViewController {
         cardsStackView.distribution = .fillEqually
         
         NSLayoutConstraint.activate([
-            carImageView.heightAnchor.constraint(equalToConstant: 144),
+            carImageView.heightAnchor.constraint(equalToConstant: 200),
             
             mainStackView.topAnchor.constraint(equalTo: carImageView.bottomAnchor, constant: 20),
             
@@ -227,7 +228,7 @@ extension MainCarInfoViewController: MainCarInfoViewInput {
     func updateMainCarInfo(with model: MainCarInfoModel) {
         let firstLabel = makeLabel(image: .appImages.sfIcons.enginePower.icon, title: "Мощность", subtitle: model.enginePower.format(.horsepower))
         let secondLabel = makeLabel(image: .appImages.sfIcons.maxSpeedometr.icon, title: "Макс. скорость", subtitle: model.maxSpeed.format(.speed))
-        let thirdLabel = makeLabel(image: .appImages.sfIcons.stopwatch.icon, title: "От 0 до 100", subtitle: model.accelerationTime.format(.seconds))
+        let thirdLabel = makeLabel(image: .appImages.sfIcons.stopwatch.icon, title: "От 0 до 100", subtitle: model.accelerationTime.format(.time))
         
         
         

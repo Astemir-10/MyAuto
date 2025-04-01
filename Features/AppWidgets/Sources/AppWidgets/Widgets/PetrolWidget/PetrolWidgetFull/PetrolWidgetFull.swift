@@ -11,7 +11,7 @@ import GlobalServiceLocator
 import AppServices
 import Combine
 
-final class PetrolSearchResultCell: UITableViewCell, ConfigurableCell {
+final class PetrolSearchResultCell: UITableViewCell, SimpleConfigurableCell {
 
     private lazy var petrolView = PetrolView().forAutoLayout()
     
@@ -32,7 +32,7 @@ final class PetrolSearchResultCell: UITableViewCell, ConfigurableCell {
     
 }
 
-final class PetrolSearchResultAdapter: TableViewAdapter<PetrolWidgetInfoModel, PetrolSearchResultCell> {
+final class PetrolSearchResultAdapter: SimpleTableViewAdapter<PetrolWidgetInfoModel, PetrolSearchResultCell> {
     
 }
 
@@ -55,7 +55,7 @@ final class PetrolSearchResult: CommonViewController {
         super.viewDidLoad()
         
         view.addSubview(tableView)
-        tableView.addConstraintToSuperView([.top(0), .bottom(0), .leading(0), .trailing(0)], withSafeArea: true)
+        tableView.addFourNullConstraintToSuperView(withSafeArea: true)
         tableView.delegate = adapter
         tableView.dataSource = adapter
         request()
@@ -67,7 +67,7 @@ final class PetrolSearchResult: CommonViewController {
             .sink(receiveError: { error in
                 print(error.localizedDescription)
             }, receiveValue: { [weak self] value in
-                let models = value.stations.map({ PetrolWidgetInfoModel($0, longitude: 0, latitude: 0) })
+                let models = value.stations.map({ PetrolWidgetInfoModel($0, longitude: 0, latitude: 0, distance: 0) })
                 self?.adapter.updateItems(models)
                 self?.tableView.reloadData()
             })
@@ -75,7 +75,7 @@ final class PetrolSearchResult: CommonViewController {
     }
 }
 
-final class PetrolParamsSelectedCell: UITableViewCell, ConfigurableCell {
+final class PetrolParamsSelectedCell: UITableViewCell, SimpleConfigurableCell {
 
     private lazy var label = UILabel().forAutoLayout()
     
@@ -96,7 +96,7 @@ final class PetrolParamsSelectedCell: UITableViewCell, ConfigurableCell {
 }
 
 
-final class PetrolParamsSelectedAdapter: TableViewAdapter<(String, String), PetrolParamsSelectedCell> {
+final class PetrolParamsSelectedAdapter: SimpleTableViewAdapter<(String, String), PetrolParamsSelectedCell> {
     
     var selected: ((String, String) -> ())?
     
@@ -138,7 +138,7 @@ final class PetrolParamsSelected: CommonViewController {
         super.viewDidLoad()
         
         view.addSubview(tableView)
-        tableView.addConstraintToSuperView([.top(0), .bottom(0), .leading(0), .trailing(0)], withSafeArea: true)
+        tableView.addFourNullConstraintToSuperView(withSafeArea: true)
         tableView.delegate = adapter
         tableView.dataSource = adapter
         adapter.selected = { [weak self] id, str in

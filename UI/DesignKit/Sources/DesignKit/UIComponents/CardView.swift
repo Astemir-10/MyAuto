@@ -50,7 +50,7 @@ public final class CardView: UIView {
             layer.shadowOpacity = 0.08
             layer.shadowOffset = CGSize(width: 0, height: 4)
             layer.shadowRadius = 12
-            layer.cornerRadius = 10
+            layer.cornerRadius = configuration.cornerRadius
         }
     }
 
@@ -72,7 +72,6 @@ public final class CardView: UIView {
         self.contentStackView.spacing = configuration.spacing
         self.layer.cornerRadius = configuration.cornerRadius
         
-        
         if configuration.level == 2 {
             layer.shadowColor = UIColor.clear.cgColor
             self.backgroundColor = .appColors.ui.primaryAlternativeSecondary
@@ -89,5 +88,9 @@ public final class CardView: UIView {
     public func addContentView(_ contentView: UIView, spacing: CGFloat = 12) {
         self.contentStackView.addArrangedSubview(contentView)
         self.contentStackView.spacing = spacing
+    }
+    
+    public func removeAllContentSubviews() {
+        self.contentStackView.subviews.forEach({ $0.removeFromSuperview() })
     }
 }

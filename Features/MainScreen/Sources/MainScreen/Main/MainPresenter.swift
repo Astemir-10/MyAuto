@@ -11,17 +11,23 @@ import Combine
 
 protocol MainViewInput: AnyObject {
     func setLoading(isLoading: Bool)
+    func endRefresh()
 }
 
 protocol MainViewOutput {
     func viewDidLoad()
+    func refreshAll()
 }
 
 final class MainPresenter {
     weak var view: MainViewInput?
     private let router: MainRouterInput
     private var cancaellables = Set<AnyCancellable>()
+    
     private var widgets = [AppWidgets.WidgetType.petrol, .weather]
+    private var refreshWidgets = [AppWidgets.WidgetType.petrol, .weather]
+    var petrolWidgetModuleInput: WidgetInput?
+    var weatherWidgetModuleInput: WidgetInput?
     
     init(view: MainViewInput, router: MainRouterInput) {
         self.view = view
@@ -34,10 +40,20 @@ extension MainPresenter: MainViewOutput {
         self.view?.setLoading(isLoading: true)
     }
     
+    func refreshAll() {
+        petrolWidgetModuleInput?.refresh()
+        weatherWidgetModuleInput?.refresh()
+    }
 }
 
 extension MainPresenter: PetrolWidgetModuleOutput {
-    
+    func endRefresh(widget: WidgetType) {
+        refreshWidgets.append(widget)
+        if refreshWidgets.contains(.petrol), refreshWidgets.contains(.weather) {
+            view?.endRefresh()
+            refreshWidgets.removeAll()
+        }
+    }
     
     func didTapLocation(item: PetrolWidgetInfoModel) {
         
@@ -52,6 +68,7 @@ extension MainPresenter: PetrolWidgetModuleOutput {
         
         if widgets.isEmpty {
             self.view?.setLoading(isLoading: false)
+            view?.endRefresh()
         }
     }
 }

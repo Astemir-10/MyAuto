@@ -327,10 +327,72 @@ public struct AppImages {
         public let maxSpeedometr = SFIcon(name: "gauge.with.dots.needle.100percent")
         public let stopwatch = SFIcon(name: "stopwatch")
         public let fuelpump = SFIcon(name: "fuelpump")
+        public let timer = SFIcon(name: "timer")
+        public let car = SFIcon(name: "car")
+        public let carSide = SFIcon(name: "car.side")
+        public let add = SFIcon(name: "plus.circle")
+        public let analytic = SFIcon(name: "chart.xyaxis.line")
         
+        public let location = SFIcon(name: "location")
+        public let location2 = SFIcon(name: "mappin.and.ellipse")
         
+        public let error = SFIcon(name: "exclamationmark.triangle")
         
+        // Weather
+        public let sun = SFIcon(name: "sun.max.fill")
+        public let cloudSun = SFIcon(name: "cloud.sun.fill")
+        public let cloud = SFIcon(name: "cloud.fill")
+        public let cloudFog = SFIcon(name: "cloud.fog.fill")
+        public let cloudSnow = SFIcon(name: "cloud.snow.fill")
+        public let drizzle = SFIcon(name: "cloud.drizzle.fill")
+        public let rain = UIImage.fromResources(by: "rain")
+        public let heavyrain = SFIcon(name: "cloud.heavyrain.fill")
+        public let snowflake = SFIcon(name: "snowflake")
+        public let snow = SFIcon(name: "cloud.snow.fill")
+        public let snowflakeCircle = SFIcon(name: "snowflake.circle.fill")
+        public let cloudBolt = SFIcon(name: "cloud.bolt.fill")
+        public let cloudBoltRain = SFIcon(name: "cloud.bolt.rain.fill")
+        public let cloudSunRain = SFIcon(name: "cloud.sun.rain.fill")
+
         
+    }
+    
+    public struct WeatherIcons {
+        public let wind = UIImage.fromResources(by: "wind")
+        public let windWithThunderstorm = UIImage.fromResources(by: "windWithThunderstorm")
+        public let windAndRain = UIImage.fromResources(by: "windAndRain")
+        public let windAndSnow = UIImage.fromResources(by: "windAndSnow")
+        public let windAndSun = UIImage.fromResources(by: "windAndSun")
+        public let humidity = UIImage.fromResources(by: "humidity") // Влажность
+        public let sun = UIImage.fromResources(by: "sun")
+        public let sunset = UIImage.fromResources(by: "sunset")
+        public let sunrise = UIImage.fromResources(by: "sunrise")
+        public let moon = UIImage.fromResources(by: "moon")
+        public let cloud = UIImage.fromResources(by: "cloud")
+        public let clowdAndWind = UIImage.fromResources(by: "clowdAndWind")
+        public let cloudWithThunderstorm = UIImage.fromResources(by: "cloudWithThunderstorm")
+        public let cloudWithSnow = UIImage.fromResources(by: "cloudWithSnowMoon")
+        public let cloudWithSnowMoon = UIImage.fromResources(by: "cloudWithSnow")
+        
+        public let cloudWithSun = UIImage.fromResources(by: "cloudWithSun")
+        public let cloudWithMoon = UIImage.fromResources(by: "cloudWithMoon")
+        public let cloudWithRain = UIImage.fromResources(by: "cloudWithRain")
+        public let cloudWithDrizzle = UIImage.fromResources(by: "cloudWithDrizzle")
+        public let cloudWithShower = UIImage.fromResources(by: "cloudWithShower")
+        
+        public let cloudWithRainMoon = UIImage.fromResources(by: "cloudWithRainMoon")
+        public let cloudWithDrizzleMoon = UIImage.fromResources(by: "cloudWithDrizzleMoon")
+        public let cloudWithShowerMoon = UIImage.fromResources(by: "cloudWithShowerMoon")
+
+        public let cloudWithLightThunderstorm = UIImage.fromResources(by: "cloudWithLightThunderstorm")
+        public let cloudWithHeavyThunderstorm = UIImage.fromResources(by: "cloudWithHeavyThunderstorm")
+        public let cloudWithLightThunderstormMoon = UIImage.fromResources(by: "cloudWithLightThunderstormMoon")
+        public let cloudWithHeavyThunderstormMoon = UIImage.fromResources(by: "cloudWithHeavyThunderstormMoon")
+
+        public let cloudWithSnowstorm = UIImage.fromResources(by: "cloudWithSnowstorm")
+        public let cloudFrostsMoon = UIImage.fromResources(by: "cloudFrostsMoon")
+        public let cloudFrosts = UIImage.fromResources(by: "cloudFrosts")
+        public let cloudWithFog = UIImage.fromResources(by: "cloudWithFog")
     }
     
     public struct Brands {
@@ -342,6 +404,7 @@ public struct AppImages {
     public let icons: Icons = Icons()
     public let sfIcons: SFIcons = SFIcons()
     public let brands: Brands = Brands()
+    public let weather: WeatherIcons = WeatherIcons()
 }
 
 public extension UIImage {

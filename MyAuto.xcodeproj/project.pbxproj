@@ -20,12 +20,14 @@
 		E22A80422CD5B17500ADEB73 /* Search in Frameworks */ = {isa = PBXBuildFile; productRef = E22A80412CD5B17500ADEB73 /* Search */; };
 		E22A80442CD5B17F00ADEB73 /* News in Frameworks */ = {isa = PBXBuildFile; productRef = E22A80432CD5B17F00ADEB73 /* News */; };
 		E22C3E112CD1990D00FC0588 /* MainScreen in Frameworks */ = {isa = PBXBuildFile; productRef = E22C3E102CD1990D00FC0588 /* MainScreen */; };
+		E230800B2D75DD930047F42F /* Skeleton in Frameworks */ = {isa = PBXBuildFile; productRef = E230800A2D75DD930047F42F /* Skeleton */; };
 		E271DB2D2D71BA9B00B27052 /* Calculator in Frameworks */ = {isa = PBXBuildFile; productRef = E271DB2C2D71BA9B00B27052 /* Calculator */; };
 		E271DB2F2D71BDE500B27052 /* Expenses in Frameworks */ = {isa = PBXBuildFile; productRef = E271DB2E2D71BDE500B27052 /* Expenses */; };
 		E271DB312D71C11E00B27052 /* Documents in Frameworks */ = {isa = PBXBuildFile; productRef = E271DB302D71C11E00B27052 /* Documents */; };
 		E284AE8C2CCD2E160008F5E6 /* CombineCoreData in Frameworks */ = {isa = PBXBuildFile; productRef = E284AE8B2CCD2E160008F5E6 /* CombineCoreData */; };
 		E284AE922CCD2EAD0008F5E6 /* AppData.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = E284AE902CCD2EAD0008F5E6 /* AppData.xcdatamodeld */; };
 		E28F473B2CD1CA8200AB0029 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28F473A2CD1CA8200AB0029 /* MainTabBarViewController.swift */; };
+		E298BC9E2D81E09B00A41351 /* CarDocumentRecognizer in Frameworks */ = {isa = PBXBuildFile; productRef = E298BC9D2D81E09B00A41351 /* CarDocumentRecognizer */; };
 		E2CF79402C6EB86600022D5F /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CF793F2C6EB86600022D5F /* MapViewController.swift */; };
 		E2CF79422C70BF8F00022D5F /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CF79412C70BF8F00022D5F /* ChatViewController.swift */; };
 		E2DCAEF22C9E3262006F4079 /* Architecture in Frameworks */ = {isa = PBXBuildFile; productRef = E2DCAEF12C9E3262006F4079 /* Architecture */; };
@@ -33,6 +35,7 @@
 		E2DCAEF62C9E3262006F4079 /* GlobalServiceLocator in Frameworks */ = {isa = PBXBuildFile; productRef = E2DCAEF52C9E3262006F4079 /* GlobalServiceLocator */; };
 		E2DCAEF82C9E32AC006F4079 /* DesignKit in Frameworks */ = {isa = PBXBuildFile; productRef = E2DCAEF72C9E32AC006F4079 /* DesignKit */; };
 		E2DCAEFA2C9E32EE006F4079 /* AppServices in Frameworks */ = {isa = PBXBuildFile; productRef = E2DCAEF92C9E32EE006F4079 /* AppServices */; };
+		E2FBEB6A2D7610F5007F685D /* WeatherEffects in Frameworks */ = {isa = PBXBuildFile; productRef = E2FBEB692D7610F5007F685D /* WeatherEffects */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +61,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E271DB2D2D71BA9B00B27052 /* Calculator in Frameworks */,
+				E298BC9E2D81E09B00A41351 /* CarDocumentRecognizer in Frameworks */,
 				E22A80422CD5B17500ADEB73 /* Search in Frameworks */,
 				E22A80402CD2F32600ADEB73 /* AnyFormatter in Frameworks */,
 				E22A803E2CD2E46100ADEB73 /* Profile in Frameworks */,
@@ -69,7 +73,9 @@
 				E271DB2F2D71BDE500B27052 /* Expenses in Frameworks */,
 				E2DCAEF62C9E3262006F4079 /* GlobalServiceLocator in Frameworks */,
 				E271DB312D71C11E00B27052 /* Documents in Frameworks */,
+				E230800B2D75DD930047F42F /* Skeleton in Frameworks */,
 				E2DCAEF82C9E32AC006F4079 /* DesignKit in Frameworks */,
+				E2FBEB6A2D7610F5007F685D /* WeatherEffects in Frameworks */,
 				E284AE8C2CCD2E160008F5E6 /* CombineCoreData in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -208,6 +214,9 @@
 				E271DB2C2D71BA9B00B27052 /* Calculator */,
 				E271DB2E2D71BDE500B27052 /* Expenses */,
 				E271DB302D71C11E00B27052 /* Documents */,
+				E230800A2D75DD930047F42F /* Skeleton */,
+				E2FBEB692D7610F5007F685D /* WeatherEffects */,
+				E298BC9D2D81E09B00A41351 /* CarDocumentRecognizer */,
 			);
 			productName = MyAuto;
 			productReference = E226BE022C6AAE8800D8F389 /* MyAuto.app */;
@@ -515,6 +524,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = MainScreen;
 		};
+		E230800A2D75DD930047F42F /* Skeleton */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Skeleton;
+		};
 		E271DB2C2D71BA9B00B27052 /* Calculator */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Calculator;
@@ -530,6 +543,10 @@
 		E284AE8B2CCD2E160008F5E6 /* CombineCoreData */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CombineCoreData;
+		};
+		E298BC9D2D81E09B00A41351 /* CarDocumentRecognizer */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CarDocumentRecognizer;
 		};
 		E2DCAEF12C9E3262006F4079 /* Architecture */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -550,6 +567,10 @@
 		E2DCAEF92C9E32EE006F4079 /* AppServices */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AppServices;
+		};
+		E2FBEB692D7610F5007F685D /* WeatherEffects */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WeatherEffects;
 		};
 /* End XCSwiftPackageProductDependency section */
 

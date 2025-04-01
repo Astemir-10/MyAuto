@@ -17,7 +17,7 @@ public protocol PetrolWidgetModuleOutput: AnyObject, WidgetOutput {
 }
 
 public enum PetrolWidgetAssembly {
-    public static func assembly(moduleOutput: PetrolWidgetModuleOutput, transitionHandler: TransitionHandler) -> UIViewController {
+    public static func assembly(moduleOutput: PetrolWidgetModuleOutput, transitionHandler: TransitionHandler) -> (UIViewController, WidgetInput) {
         let view = PetrolWidgetView()
         let router = PetrolWidgetRouterImpl()
         router.transitionHandler = transitionHandler
@@ -29,6 +29,6 @@ public enum PetrolWidgetAssembly {
                                               moduleOutput: moduleOutput,
                                               router: router)
         view.output = presenter
-        return view
+        return (view, presenter)
     }
 }

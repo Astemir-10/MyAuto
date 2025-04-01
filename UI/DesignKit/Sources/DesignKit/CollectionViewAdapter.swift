@@ -7,13 +7,12 @@
 
 import UIKit
 
-// Протокол для ячейки, которая может быть сконфигурирована с элементом типа ItemType
-public protocol ConfigurableCell {
+public protocol SimpleConfigurableCell {
     associatedtype ItemType
     func configure(with item: ItemType)
 }
 
-open class CollectionViewAdapter<ItemType, CellType: UICollectionViewCell>: NSObject, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellType: ConfigurableCell, CellType.ItemType == ItemType {
+open class CollectionViewAdapter<ItemType, CellType: UICollectionViewCell>: NSObject, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CellType: SimpleConfigurableCell, CellType.ItemType == ItemType {
     
     private var items: [ItemType]
     private let didSelectItem: ((ItemType) -> Void)?

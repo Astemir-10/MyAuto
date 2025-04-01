@@ -7,12 +7,12 @@
 
 import UIKit
 
-final class SheetContentView: UIView {
+public class SheetContentView: UIView {
     private lazy var graberView = GraberView().forAutoLayout()
     
     private lazy var contentView = UIView().forAutoLayout()
     
-    override var backgroundColor: UIColor? {
+    public override var backgroundColor: UIColor? {
         didSet {
             if self.backgroundColor != .clear {
                 contentView.backgroundColor = backgroundColor
@@ -33,7 +33,7 @@ final class SheetContentView: UIView {
     private func setupUI() {
         self.addSubview(graberView)
         self.addSubview(contentView)
-        contentView.addConstraintToSuperView([.top(0), .bottom(0), .leading(0), .trailing(0)])
+        contentView.addFourNullConstraintToSuperView()
         graberView.addConstraintToSuperView([.top(0), .centerX(0)])
         graberView.setSize(width: GraberView.Constants.width, height: GraberView.Constants.height)
         
@@ -46,7 +46,7 @@ final class SheetContentView: UIView {
         contentView.backgroundColor = .appColors.ui.main
     }
     
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
         createCircularCutout()
     }

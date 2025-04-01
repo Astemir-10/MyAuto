@@ -19,6 +19,9 @@ let package = Package(
         .package(name: "CombineCoreData", path: "../../CombineCoreData"),
         .package(name: "AppMap", path: "../../AppMap"),
         .package(name: "AppWidgets", path: "../../AppWidgets"),
+        .package(name: "CarDocumentRecognizer", path: "../../CarDocumentRecognizer"),
+        .package(name: "AppFileManager", path: "../../AppFileManager"),
+        .package(name: "SmartCamera", path: "../../SmartCamera"),
         
     ],
     targets: [
@@ -31,7 +34,10 @@ let package = Package(
                 "DesignTokens",
                 "CombineCoreData",
                 "AppMap",
-                "AppWidgets"
+                "AppWidgets",
+                "CarDocumentRecognizer",
+                "AppFileManager",
+                "SmartCamera"
             ]),
     ]
 )

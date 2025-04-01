@@ -14,6 +14,7 @@ public struct AppFonts {
     public let titleLarge = UIFont.systemFont(ofSize: 28, weight: .bold)
     public let secondaryLarge = UIFont.systemFont(ofSize: 16, weight: .regular)
     public let secondaryNeutral = UIFont.systemFont(ofSize: 14, weight: .regular)
+    public let secondaryMedium = UIFont.systemFont(ofSize: 14, weight: .medium)
     public let smallNeutral = UIFont.systemFont(ofSize: 12, weight: .regular)
     public let neutral = UIFont.systemFont(ofSize: 17, weight: .regular)
     public let textBold = UIFont.systemFont(ofSize: 22, weight: .bold)
@@ -23,6 +24,7 @@ public struct AppFonts {
     public let neutralMedium = UIFont.systemFont(ofSize: 17, weight: .medium)
     public let largeNeutralSemibold = UIFont.systemFont(ofSize: 17, weight: .semibold)
     public let largeMedium = UIFont.systemFont(ofSize: 28, weight: .medium)
+    public let largeBold = UIFont.systemFont(ofSize: 28, weight: .bold)
     public let descriptionSmall = UIFont.systemFont(ofSize: 14, weight: .regular)
     public let neutralSemibold = UIFont.systemFont(ofSize: 16, weight: .semibold)
 }

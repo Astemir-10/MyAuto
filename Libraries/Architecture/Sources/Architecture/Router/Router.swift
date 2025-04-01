@@ -6,22 +6,29 @@
 //
 
 import UIKit
+import Extensions
 
 public protocol TransitionHandler: AnyObject {
     func present(_ viewController: UIViewController)
     func push(_ viewController: UIViewController)
     func close()
     func pop()
+    func closeTopViewController()
 }
 
 public protocol RouterInput {
     var transitionHandler: TransitionHandler! { get set }
     func close()
+    func closeTopViewController()
 }
 
 public extension RouterInput {
     func close() {
         transitionHandler.close()
+    }
+    
+    func closeTopViewController() {
+        transitionHandler.closeTopViewController()
     }
 }
 
@@ -41,4 +48,9 @@ extension UIViewController: TransitionHandler {
     public func pop() {
         navigationController?.popViewController(animated: true)
     }
+    
+    public func closeTopViewController() {
+        self.topViewController?.dismiss(animated: true)
+    }
+
 }

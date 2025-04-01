@@ -12,11 +12,13 @@ let package = Package(
             targets: ["Architecture"]),
     ],
     dependencies: [
+        .package(name: "Extensions", path: "../../Extensions"),
     ],
     targets: [
         .target(
             name: "Architecture",
             dependencies: [
+                "Extensions"
             ]),
     ]
 )

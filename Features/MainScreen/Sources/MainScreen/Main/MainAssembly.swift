@@ -21,10 +21,13 @@ public enum MainAssembly {
                                                          transitionHandler: mainViewController)
         
         let weatherWidget = WeatherWidgetAssembly.assembly(widgetOutput: presenter)
-        mainViewController.petrolWidget = petrolWidget
-        mainViewController.weatherWidget = weatherWidget
+        mainViewController.petrolWidget = petrolWidget.0
+        mainViewController.weatherWidget = weatherWidget.0
         let mainCar = MainCarInfoAssembly.assembly()
         mainViewController.mainCarInfoViewController = mainCar
+        presenter.petrolWidgetModuleInput = petrolWidget.1
+        presenter.weatherWidgetModuleInput = weatherWidget.1
+        
         return navigationController
     }
 }

@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Доступ к фото</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Дайте доступ к камере</string>
 	<key>NSLocationUsageDescription</key>
 	<string>Нам необходим доступ к геолокации</string>
 	<key>NSAppTransportSecurity</key>

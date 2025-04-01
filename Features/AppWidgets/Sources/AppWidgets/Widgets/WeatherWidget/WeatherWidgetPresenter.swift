@@ -12,15 +12,35 @@ import CoreLocation
 import Combine
 
 protocol WeatherWidgetViewInput: WidgetViewInput {
-    
+    func setLocation(locationName: String)
 }
 
 protocol WeatherWidgetViewOutput {
     func viewDidLoad()
+    func refereshData()
+}
+
+protocol WeatherWidgetModuleOutput: WidgetOutput {
+
+}
+
+
+struct WeatherWidgetState {
+    let locationName: String
+    let data: WeatherData
+}
+
+struct WeatherWidgetModel {
+    let temperature: Double
+    let windSpeed: Double
+    let code: WeatherCode
+    let currentHourIndex: Int
+    let hourly: [HourlyWeather]
 }
 
 final class WeatherWidgetPresenter {
     weak var view: WeatherWidgetViewInput?
+    weak var moduleOutput: WeatherWidgetModuleOutput?
     
     private let weatherService: WeatherService
     private var locationManager: LocationManager
@@ -36,29 +56,56 @@ final class WeatherWidgetPresenter {
     }
     
     private func request(lon: Double, lat: Double) {
-        guard needRequest else {
-            return
+        locationManager.getGeoInfo(from: .init(latitude: lat, longitude: lon)).sink { [weak self] geoInfo in
+            self?.view?.setLocation(locationName: geoInfo.city)
         }
-        weatherService.requestForecast(lat: lat, lng: lon)
-            .sink (receiveError: { [weak self] error in
+        .store(in: &cancellables)
+        
+        
+        weatherService.requestHourlyForecast(lat: lat, lng: lon)
+            .sink(receiveError: { [weak self] _ in
                 self?.view?.setState(.error)
-            }, receiveValue: { [weak self] data in
-                self?.view?.setState(.loaded(data: data))
-                self?.widgetOutput?.widgetIsLoaded(widgetType: .weather)
+                self?.widgetOutput?.endRefresh(widget: .weather)
+            }, receiveValue: { [weak self] hourly in
+                self?.handleWeatherHourly(hourly)
             })
             .store(in: &cancellables)
+    }
+    
+    private func handleWeatherHourly(_ model: WeatherHourly) {
+        let calendar = Calendar.current
 
-        needRequest = false
+        if let currentWeatherIndex = model.hourly.firstIndex(where: {
+            calendar.component(.hour, from: $0.date) == calendar.component(.hour, from: Date())
+        }) {
+            let currentWeather = model.hourly[currentWeatherIndex]
+            let model = WeatherWidgetModel(temperature: currentWeather.temperature2m,
+                                           windSpeed: currentWeather.windSpeed10m,
+                                           code: currentWeather.weatherCode,
+                                           currentHourIndex: currentWeatherIndex,
+                                           hourly: model.hourly)
+            view?.setState(.loaded(data: model))
+        } else {
+            self.view?.setState(.error)
+        }
+        
+        moduleOutput?.widgetIsLoaded(widgetType: .weather)
+        self.widgetOutput?.endRefresh(widget: .weather)
     }
 }
 
 extension WeatherWidgetPresenter: WeatherWidgetViewOutput {
+
     func viewDidLoad() {
         self.view?.setState(.loading)
         locationManager.delegate = self
         locationManager.start(.authorizedAlways)
     }
     
+    func refereshData() {
+        needRequest = true
+        locationManager.start(.authorizedAlways)
+    }
     
 }
 
@@ -71,7 +118,8 @@ extension WeatherWidgetPresenter: LocationManagerDelegate {
     }
     
     func didUpdateLocation(latitude: Double, longitude: Double, totalAccuracy: Double) {
-        if totalAccuracy <= 10 {
+        if totalAccuracy <= 20, needRequest {
+            needRequest = false
             self.locationManager.stop()
             request(lon: longitude, lat: latitude)
         }
@@ -79,5 +127,11 @@ extension WeatherWidgetPresenter: LocationManagerDelegate {
     
     func didFailWithError(error: any Error) {
         
+    }
+}
+
+extension WeatherWidgetPresenter: WidgetInput {
+    func refresh() {
+        refereshData()
     }
 }

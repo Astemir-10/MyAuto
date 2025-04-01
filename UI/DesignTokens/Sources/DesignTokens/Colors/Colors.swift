@@ -58,8 +58,26 @@ public struct AppColors {
         public let tabNormal = UIColor.colorBy(named: "tabBar.iconNormal")
     }
     
+    public struct Weather {
+        public let sun = UIColor.colorBy(named: "sun")
+        public let cloudSun = UIColor.colorBy(named: "cloudSun")
+        public let cloud = UIColor.colorBy(named: "cloud")
+        public let cloudFog = UIColor.colorBy(named: "cloudFog")
+        public let cloudSnow = UIColor.colorBy(named: "cloudSnow")
+        public let drizzle = UIColor.colorBy(named: "drizzle")
+        public let rain = UIColor.colorBy(named: "rain")
+        public let heavyrain = UIColor.colorBy(named: "heavyrain")
+        public let snowflake = UIColor.colorBy(named: "snowflake")
+        public let snow = UIColor.colorBy(named: "snow")
+        public let snowflakeCircle = UIColor.colorBy(named: "snowflakeCircle")
+        public let cludBolt = UIColor.colorBy(named: "cludBolt")
+        public let cloudBoltRain = UIColor.colorBy(named: "cloudBoltRain")
+
+    }
+    
     public let text: TextColors = TextColors()
     public let ui: UIColors = UIColors()
+    public let weather: Weather = Weather()
     
 }
 

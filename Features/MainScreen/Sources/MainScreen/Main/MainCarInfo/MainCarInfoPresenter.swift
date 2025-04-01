@@ -28,7 +28,7 @@ final class MainCarInfoPresenter: MainCarInfoViewOutput {
                                             model: "Camry",
                                             year: 2016,
                                             licensePlate: "Н558ММ07",
-                                            mileage: 146000,
+                                            mileage: 146000000,
                                             fuelType: "Бензин",
                                             lastMaintenanceDate: "14.23.23",
                                             maintenanceStatus: .good,

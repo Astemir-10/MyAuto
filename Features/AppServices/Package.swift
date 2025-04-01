@@ -13,14 +13,16 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Networking", path: "../../Networking"),
-        .package(name: "Extensions", path: "../../Extensions")
+        .package(name: "Extensions", path: "../../Extensions"),
+        .package(name: "DesignTokens", path: "../../DesignTokens"),
     ],
     targets: [
         .target(
             name: "AppServices",
             dependencies: [
                 "Networking",
-                "Extensions"
+                "Extensions",
+                "DesignTokens"
             ]),
     ]
 )

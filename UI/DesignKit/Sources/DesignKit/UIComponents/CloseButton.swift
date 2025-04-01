@@ -24,7 +24,7 @@ public final class CloseButton: UIControl {
     
     private func setupUI() {
         self.addSubviews(closeImageView)
-        self.closeImageView.addConstraintToSuperView([.top(0), .bottom(0), .trailing(0), .leading(0)])
+        self.closeImageView.addFourNullConstraintToSuperView()
         closeImageView.setSize(width: 40, height: 40)
         closeImageView.image = .appImages.icons.close
         self.addAction(.init(handler: { [weak self] _ in

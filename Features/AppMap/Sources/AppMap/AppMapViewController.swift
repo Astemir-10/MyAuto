@@ -40,7 +40,7 @@ final class AppMapViewController: CommonViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(mapView)
-        mapView.addConstraintToSuperView([.top(0), .bottom(0), .leading(0), .trailing(0)])
+        mapView.addFourNullConstraintToSuperView()
         mapView.delegate = self
         setLocations(annotations: annotations)
         if let currentAnnotation = currentAnnotation {

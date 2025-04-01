@@ -32,8 +32,9 @@ public final class CombineCoreData {
             self?.backgroundContext.perform {
                 let entityName = String(describing: entity)
                 guard let newObject = NSEntityDescription.insertNewObject(forEntityName: entityName, into: self!.backgroundContext) as? T else {
+                    print("ERRO ROKOKOK")
                     promise(.failure(NSError(domain: "CoreDataManager", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to create entity \(entityName)"])))
-                    return
+                    returnцы
                 }
                 configure(newObject)
                 
@@ -41,11 +42,30 @@ public final class CombineCoreData {
                     try self?.backgroundContext.save()
                     promise(.success(newObject))
                 } catch {
+                    print(error.localizedDescription)
                     promise(.failure(error))
                 }
             }
         }
         .eraseToAnyPublisher()
+    }
+    
+    public func removeIfFind<T: NSManagedObject>(entity: T.Type, predicate: NSPredicate? = nil) {
+        self.backgroundContext.perform {
+            let request = T.fetchRequest()
+            request.predicate = predicate
+            let fetched = try? self.backgroundContext.fetch(request) as? [T]
+            
+            fetched?.forEach({
+                self.backgroundContext.delete($0)
+            })
+            
+            do {
+                try self.backgroundContext.save()
+            } catch {
+                
+            }
+        }
     }
     
     public func fetchEntities<T: NSManagedObject>(entity: T.Type, predicate: NSPredicate? = nil, sortDescriptors: [NSSortDescriptor]? = nil) -> AnyPublisher<[T], Error> {
@@ -63,6 +83,7 @@ public final class CombineCoreData {
                 }
             }
         }
+        .receive(on: RunLoop.main)
         .eraseToAnyPublisher()
     }
     

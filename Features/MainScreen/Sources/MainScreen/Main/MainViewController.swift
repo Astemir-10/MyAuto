@@ -93,6 +93,11 @@ public final class MainViewController: CommonViewController {
         super.viewDidLoad()
         setupUI()
         output.viewDidLoad()
+        scrollView.addPullToRefresh { [weak self] in
+            DispatchQueue.main.async {
+                self?.output.refreshAll()
+            }
+        }
     }
     
     private func setupUI() {
@@ -103,6 +108,7 @@ public final class MainViewController: CommonViewController {
         self.addChildVCSimple(mainCarInfoViewController)
         collectionView.contentInset = .init(top: 0, left: 0, bottom: 100, right: 0)
         self.view.addSubview(scrollView)
+        scrollView.contentInset = .init(top: 20, left: 0, bottom: 20, right: 0)
         scrollView.addConstraintToSuperView([.leading(0),
                                              .bottom(0),
                                              .top(0),
@@ -116,16 +122,16 @@ public final class MainViewController: CommonViewController {
         contentStackView.addArrangedSubviews(makeWidgetWithHeader(header: nil, view: mainCarInfoView),
                                              makeWidgetWithHeader(header: "Бензин", view: petrolWidgetView, rightViewItem: ("Еще", {
             print("OKOKOKO")
-        }))
-//                                             makeWidgetWithHeader(header: "Погода", view: weatherWidgetView))
+        })),
+                                             makeWidgetWithHeader(header: nil, view: weatherWidgetView)
                                              )
         mainCarInfoView.widthAnchor.constraint(equalTo: contentStackView.widthAnchor).activated()
         petrolWidgetView.widthAnchor.constraint(equalTo: contentStackView.widthAnchor).activated()
-        contentStackView.widthAnchor.constraint(equalTo: view.widthAnchor).activated()
+        contentStackView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor).activated()
         contentStackView.spacing = 20
     }
     
-    private func makeWidgetWithHeader(header: String?, view: UIView, rightViewItem: (String, () -> ())? = nil) -> UIView {
+    private func makeWidgetWithHeader(header: String?, subtitle: String? = nil, view: UIView, rightViewItem: (String, () -> ())? = nil) -> UIView {
         let stackView = UIStackView()
         let headerRightStackView = UIStackView()
         headerRightStackView.axis = .horizontal
@@ -133,6 +139,7 @@ public final class MainViewController: CommonViewController {
         let headerView = HeaderView()
         headerView.configure { configuration in
             configuration.edgeInsets = .init(top: 12, left: 0, bottom: 12, right: 0)
+            configuration.spacing = 8
         }
         headerRightStackView.addArrangedSubview(headerView)
         
@@ -156,27 +163,37 @@ public final class MainViewController: CommonViewController {
         }
         
         
-        
-        if let header {
+        if let header, let subtitle {
+            headerView.set(title: header, subtitle: subtitle)
+            stackView.addArrangedSubviews([headerRightStackView])
+            headerRightStackView.widthAnchor.constraint(equalTo: stackView.widthAnchor, constant: -32).activated()
+        } else if let header {
             headerView.set(title: header)
             stackView.addArrangedSubviews([headerRightStackView])
             headerRightStackView.widthAnchor.constraint(equalTo: stackView.widthAnchor, constant: -32).activated()
         }
+        
         stackView.addArrangedSubviews([view])
+        view.widthAnchor.constraint(equalTo: stackView.widthAnchor).activated()
         stackView.alignment = .center
         stackView.spacing = 8
         return stackView
     }
-    
 }
 
 extension MainViewController: MainViewInput, LoaderViewInput {
+    func endRefresh() {
+        scrollView.endRefreshing()
+    }
+    
+
+    
     func setLoading(isLoading: Bool) {
-        if isLoading {
-            showLoader()
-        } else {
-            hideLoader()
-        }
+//        if isLoading {
+//            showLoader()
+//        } else {
+//            hideLoader()
+//        }
     }
   
 }

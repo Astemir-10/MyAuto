@@ -40,7 +40,7 @@ final class LoaderView: UIViewController {
         background.addSubview(loadingBackgroundView)
         background.clipsToBounds = true
         background.layer.cornerRadius = 8
-        loadingBackgroundView.addConstraintToSuperView([.top(0), .leading(0), .trailing(0), .bottom(0)])
+        loadingBackgroundView.addFourNullConstraintToSuperView()
         loadingContentView.axis = .vertical
         loadingContentView.spacing = 8
         loadingContentView.distribution = .fill
@@ -60,7 +60,7 @@ final class LoaderView: UIViewController {
         background.addConstraintToSuperView([.centerX(0), .centerY(0)])
         loaderView.isUserInteractionEnabled = false
         self.view.addSubview(loaderView)
-        loaderView.addConstraintToSuperView([.top(0), .leading(0), .trailing(0), .bottom(0)])
+        loaderView.addFourNullConstraintToSuperView()
         loaderView.backgroundColor = .black.withAlphaComponent(0.2)
         
         Timer.scheduledTimer(timeInterval: timeout, target: self, selector: #selector(timeoutHandler), userInfo: nil, repeats: false)
