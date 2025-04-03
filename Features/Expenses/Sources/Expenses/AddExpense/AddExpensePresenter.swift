@@ -17,6 +17,7 @@ protocol AddExpenseViewOutput {
     var expenseType: ExpenseType { get }
     func setup()
     func saveExpense(model: ExpenseModelProtocol)
+    func selectPetrol()
 }
 
 final class AddExpensePresenter: AddExpenseViewOutput {
@@ -24,11 +25,13 @@ final class AddExpensePresenter: AddExpenseViewOutput {
     internal let expenseType: ExpenseType
     private let storage: CombineCoreData
     private var cancellables = Set<AnyCancellable>()
+    private let router: AddExpenseRouterInput
     
-    init(storage: CombineCoreData, expenseType: ExpenseType, view: AddExpenseViewInput) {
+    init(storage: CombineCoreData, expenseType: ExpenseType, view: AddExpenseViewInput, router: AddExpenseRouterInput) {
         self.view = view
         self.expenseType = expenseType
         self.storage = storage
+        self.router = router
     }
     
     func setup() {
@@ -85,5 +88,9 @@ final class AddExpensePresenter: AddExpenseViewOutput {
                 .store(in: &self.cancellables)
             }
         }
+    }
+    
+    func selectPetrol() {
+        router.openPetrolList()
     }
 }

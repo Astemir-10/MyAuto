@@ -63,14 +63,36 @@ protocol ExpenseModelProtocol {
 struct PetrolExpense: ExpenseModelProtocol {
     struct PetrolStation: Codable, ConvertibleToDictionary {
         let name: String
-        let petrolType: PetrolType
-        let priceOnLiter: Double
+        let cityName: String
+        let petrolTypes: [PetrolTypeItem]
         let longitude: Double
         let latitude: Double
     }
     
+    struct PetrolTypeItem: Codable {
+        let petrolType: PetrolType
+        let priceOnLiter: Double
+    }
+    
     enum PetrolType: String, Codable {
         case ai92, ai95, ai100, gas, disel, electrol
+        
+        var titel: String {
+            switch self {
+            case .ai92:
+                "АИ-92"
+            case .ai95:
+                "АИ-95"
+            case .ai100:
+                "АИ-100"
+            case .gas:
+                "СУГ"
+            case .disel:
+                "ДЕ"
+            case .electrol:
+                "Эл"
+            }
+        }
     }
     
     var id: String
@@ -169,9 +191,6 @@ final class ExpensesViewController: CommonViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
                 
-        let analyticsBarItem = UIBarButtonItem(image: .appImages.sfIcons.analytic.withSize(size: 20, weight: .regular), style: .plain, target: self, action: #selector(analyticsAction))
-        
-//        navigationItem.rightBarButtonItems = [analyticsBarItem]
         self.view.addSubview(tableView)
         tableView.addConstraintToSuperView([.top(8), .bottom(-8), .leading(8), .trailing(-8)], withSafeArea: true)
         self.title = "Расходы"

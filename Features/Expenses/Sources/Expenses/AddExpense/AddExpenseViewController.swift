@@ -12,6 +12,11 @@ final class AddExpenseViewController: CommonViewController {
     
     var output: AddExpenseViewOutput!
     
+    private lazy var petrolView: PetrolExpenseView = PetrolExpenseView().forAutoLayout()
+    
+    private lazy var scrollView: UIScrollView = UIScrollView().forAutoLayout()
+    private lazy var contentStackView = UIStackView().forAutoLayout()
+    
     private lazy var sumTextField: TextField = {
         let tf = TextField()
         tf.backgroundColor = .appColors.ui.primaryAlternativeThirdty
@@ -37,10 +42,15 @@ final class AddExpenseViewController: CommonViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         output.setup()
+        self.view.addSubview(scrollView)
+        scrollView.addFourNullConstraintToSuperView(withSafeArea: true)
+        scrollView.addSubview(contentStackView)
+        contentStackView.addFourNullConstraintToSuperView()
         self.view.addSubview(addButton)
         addButton.addConstraintToSuperView([.leading(0), .trailing(0), .bottom(-12)], withSafeArea: true)
         
         navigationItem.rightBarButtonItem = .init(title: "Готово", style: .done, target: self, action: #selector(doneAction))
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -63,11 +73,14 @@ final class AddExpenseViewController: CommonViewController {
         
         switch expenseType {
         case .petrol:
-            break
+            contentStackView.addArrangedSubview(petrolView)
+            petrolView.tapPetrolHandler { [weak self] in
+                self?.output.selectPetrol()
+            }
         case .service:
             break
         case .wash, .insurance, .taxes, .parking, .fines:
-            self.view.addSubview(sumTextField)
+            contentStackView.addArrangedSubview(sumTextField)
             sumTextField.addConstraintToSuperView([.leading(20), .trailing(-20), .centerY(-100)])
         }
         
