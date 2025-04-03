@@ -29,6 +29,10 @@ public final class Button: UIControl {
         }
     }
     
+    public enum BackgroundStyle {
+        case primary, secondary, empty
+    }
+    
     public enum CornerStyle {
         case rounded
         case custom(CGFloat)
@@ -195,6 +199,18 @@ public final class Button: UIControl {
     
     public func setImage(_ image: UIImage) {
         self.imageView.image = image
+    }
+    
+    public func setBackgroundStyle(_ style: BackgroundStyle) {
+        switch style {
+        case .primary:
+            self.configuration.backgroundColor = self.configuration.backgroundColor.withAlphaComponent(1)
+        case .secondary:
+            self.configuration.backgroundColor = self.configuration.backgroundColor.withAlphaComponent(0.2)
+        case .empty:
+            self.configuration.backgroundColor = self.configuration.backgroundColor.withAlphaComponent(0)
+        }
+        self.updateConfiguration()
     }
 
 //    public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {

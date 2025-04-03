@@ -95,3 +95,54 @@ public extension Double {
         }
     }
 }
+
+public enum SmartDateFormatter {
+    private static var calendar: Calendar {
+        var calndar = Calendar.current
+        calndar.locale = .init(identifier: "ru_RU")
+        return calndar
+    }
+    private static let relativeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        formatter.doesRelativeDateFormatting = true
+        return formatter
+    }()
+    
+    private static let currentYearFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = .init(identifier: "ru_RU")
+        formatter.setLocalizedDateFormatFromTemplate("d MMMM")
+        return formatter
+    }()
+    
+    private static let otherYearFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = .init(identifier: "ru_RU")
+        formatter.setLocalizedDateFormatFromTemplate("d MMMM, yyyy")
+        return formatter
+    }()
+    
+    static public func string(from date: Date) -> String {
+        let now = Date()
+        
+        // Проверяем, сегодня ли дата
+        if SmartDateFormatter.calendar.isDate(date, inSameDayAs: now) {
+            return "Сегодня"
+        }
+        
+        // Проверяем, вчерашняя ли дата
+        if let yesterday = SmartDateFormatter.calendar.date(byAdding: .day, value: -1, to: now),
+           SmartDateFormatter.calendar.isDate(date, inSameDayAs: yesterday) {
+            return "Вчера"
+        }
+        
+        // Проверяем, текущий ли год
+        if SmartDateFormatter.calendar.component(.year, from: date) == SmartDateFormatter.calendar.component(.year, from: now) {
+            return SmartDateFormatter.currentYearFormatter.string(from: date)
+        } else {
+            return SmartDateFormatter.otherYearFormatter.string(from: date)
+        }
+    }
+}

@@ -34,7 +34,7 @@ public final class CombineCoreData {
                 guard let newObject = NSEntityDescription.insertNewObject(forEntityName: entityName, into: self!.backgroundContext) as? T else {
                     print("ERRO ROKOKOK")
                     promise(.failure(NSError(domain: "CoreDataManager", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to create entity \(entityName)"])))
-                    returnцы
+                    return
                 }
                 configure(newObject)
                 

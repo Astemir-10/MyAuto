@@ -43,12 +43,12 @@ final class ExpenseTypesTableViewCell: UITableViewCell, ConfigurableCell {
         titleLabel.font = .appFonts.largeMedium
         titleLabel.textColor = .appColors.text.primary
         titleLabel.text = ""
-        scrollView.addConstraintToSuperView([.leading(0), .trailing(0), .bottom(0)])
+        scrollView.addConstraintToSuperView([.leading(0), .trailing(0), .bottom(-20)])
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8).activated()
         scrollView.setSize(height: 136)
         scrollView.addSubview(contentStackView)
-        contentStackView.addFourNullConstraintToSuperView()
+        contentStackView.addConstraintToSuperView([.top(0), .leading(0), .bottom(0), .trailing(0)])
         contentStackView.axis = .horizontal
         contentStackView.spacing = 8
         contentStackView.distribution = .fillProportionally

@@ -19,13 +19,19 @@ protocol ExpensesViewInput: AnyObject {
 }
 
 protocol ExpensesViewOutput {
+    func selectedFilter() -> ExpenseFilter
     func setup()
     func reload()
+    func updateState()
     func remove(item: ExpenseModelProtocol)
     func addExpense()
     func addExpense(type: ExpenseType)
     func analyticsExpense()
     func didSelectItem(item: ExpenseModelProtocol)
+    func getStartDate() -> Date?
+    func getEndDate() -> Date?
+    func getTotalAmount() -> Double
+    func setSelectedFilter(filter: ExpenseFilter)
 }
 
 final class ExpensesPresenter: ExpensesViewOutput {
@@ -35,6 +41,7 @@ final class ExpensesPresenter: ExpensesViewOutput {
     private let router: ExpensesRouterInput
     private var items: [ExpenseModelProtocol] = []
     private var cancellables = Set<AnyCancellable>()
+    private var currentFilter: ExpenseFilter = .today
     
     init(storage: CombineCoreData, view: ExpensesViewInput, router: ExpensesRouterInput) {
         self.view = view
@@ -56,6 +63,12 @@ final class ExpensesPresenter: ExpensesViewOutput {
     
     func addExpense(type: ExpenseType) {
         self.router.openAddExpense(expenseType: type)
+    }
+    
+    func getTotalAmount() -> Double {
+        var totalAmount = 0.0
+        self.itemsWithFilter().forEach({ totalAmount += $0.sum })
+        return totalAmount
     }
     
     func setup() {
@@ -80,6 +93,20 @@ final class ExpensesPresenter: ExpensesViewOutput {
                 self?.handleExpenses(expenses: expenses)
             })
             .store(in: &cancellables)
+    }
+    
+    func updateState() {
+        self.view?.setState(state: .loaded(sections: self.items))
+    }
+    
+    func selectedFilter() -> ExpenseFilter {
+        self.currentFilter
+    }
+    
+    func setSelectedFilter(filter: ExpenseFilter) {
+        guard currentFilter != filter else { return }
+        currentFilter = filter
+        self.view?.setState(state: .loaded(sections: itemsWithFilter()))
     }
     
     private func handleExpenses(expenses: [Expense]) {
@@ -118,11 +145,49 @@ final class ExpensesPresenter: ExpensesViewOutput {
                                                 description: expense.expenseDescription))
             }
         })
-        self.view?.setState(state: .loaded(sections: items))
+        self.view?.setState(state: .loaded(sections: itemsWithFilter() ))
     }
     
     func remove(item: ExpenseModelProtocol) {
         storage.removeIfFind(entity: Expense.self, predicate: NSPredicate(format: "id == %@", item.id))
         self.items.removeAll(where: { $0.id == item.id })
+    }
+    
+    private func itemsWithFilter() -> [ExpenseModelProtocol] {
+        let calendar = Calendar.current
+        let now = Date()
+//        items.append(CommonExpense(id: "123", date: "22.01.2025".toDate(dateForamtter: .simpleFormatter)!, sum: 3413, type: .insurance))
+//        items.append(CommonExpense(id: "1623", date: "22.02.2025".toDate(dateForamtter: .simpleFormatter)!, sum: 232, type: .petrol))
+//        items.append(CommonExpense(id: "1243", date: "22.03.2025".toDate(dateForamtter: .simpleFormatter)!, sum: 65, type: .insurance))
+//        items.append(CommonExpense(id: "1253", date: "22.12.2024".toDate(dateForamtter: .simpleFormatter)!, sum: 645, type: .parking))
+//        items.append(CommonExpense(id: "1237", date: "22.01.2025".toDate(dateForamtter: .simpleFormatter)!, sum: 43, type: .taxes))
+        
+        return items.filter { item in
+            switch currentFilter {
+            case .all:
+                return true
+            case .today:
+                return calendar.isDate(item.date, inSameDayAs: now)
+            case .month:
+                return calendar.isDate(item.date, equalTo: now, toGranularity: .month)
+            case .year:
+                return calendar.isDate(item.date, equalTo: now, toGranularity: .year)
+            case .yesterday:
+                let yesterday = calendar.date(byAdding: .day, value: -1, to: now)!
+                return calendar.isDate(item.date, inSameDayAs: yesterday)
+            case .week:
+                let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now))!
+                let endOfWeek = calendar.date(byAdding: .day, value: 6, to: startOfWeek)!
+                return item.date >= startOfWeek && item.date <= endOfWeek
+            }
+        }.sorted(by: { $0.date > $1.date })
+    }
+    
+    func getStartDate() -> Date? {
+        itemsWithFilter().last?.date
+    }
+    
+    func getEndDate() -> Date? {
+        itemsWithFilter().first?.date
     }
 }

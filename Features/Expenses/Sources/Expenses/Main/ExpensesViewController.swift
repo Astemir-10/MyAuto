@@ -168,18 +168,17 @@ final class ExpensesViewController: CommonViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let addBarItem = UIBarButtonItem(image: .appImages.sfIcons.add.withSize(size: 20, weight: .regular), style: .plain, target: self, action: #selector(addAction))
-        
+                
         let analyticsBarItem = UIBarButtonItem(image: .appImages.sfIcons.analytic.withSize(size: 20, weight: .regular), style: .plain, target: self, action: #selector(analyticsAction))
         
-        navigationItem.rightBarButtonItems = [analyticsBarItem, addBarItem]
+//        navigationItem.rightBarButtonItems = [analyticsBarItem]
         self.view.addSubview(tableView)
         tableView.addConstraintToSuperView([.top(8), .bottom(-8), .leading(8), .trailing(-8)], withSafeArea: true)
         self.title = "Расходы"
         navigationItem.largeTitleDisplayMode = .always
         navigationController?.navigationBar.prefersLargeTitles = true
         output.setup()
+        tableView.estimatedSectionHeaderHeight = 44
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -210,19 +209,68 @@ extension ExpensesViewController: ExpensesViewInput {
                 self?.output.addExpense(type: type)
             }), deleteAction: nil)]))
             
-            sections.append(.init(headerType: nil, model: nil, rows: items.map({ AnyTableRow(cellType: ExpensesTableViewCell.self, model: $0, deleteAction: { [weak self] model in
-                guard let model = model as? ExpenseModelProtocol else { return }
-                self?.output.remove(item: model)
-            }) })))
+            sections.append(.init(headerType: nil, model: nil, rows: [
+                .init(cellType: ExpenseFiltersCell.self, model: ExpenseFiltersModel(filters: [
+                    ExpenseFilterModel(filter: .all, isSelected: output.selectedFilter() == .all),
+                    ExpenseFilterModel(filter: .today, isSelected: output.selectedFilter() == .today),
+                    ExpenseFilterModel(filter: .yesterday, isSelected: output.selectedFilter() == .yesterday),
+                    ExpenseFilterModel(filter: .week, isSelected: output.selectedFilter() == .week),
+                    ExpenseFilterModel(filter: .month, isSelected: output.selectedFilter() == .month),
+                    ExpenseFilterModel(filter: .year, isSelected: output.selectedFilter() == .year),
+                ], didSelectAction: { [weak self] filter in
+                    self?.output.setSelectedFilter(filter: filter)
+                }), deleteAction: nil)
+            ]))
+            
+            var fullSum = 0.0
+            items.forEach({ fullSum += $0.sum })
+            
+            sections.append(.init(headerType: nil, model: nil, rows: [
+                .init(cellType: TotalExpensesCell.self, model: TotalExpensesModel(fullSum: fullSum, startDate: output.getStartDate(), endDate: output.getEndDate(), filter: output.selectedFilter(), analyticAction: { [weak self] in
+                    self?.output.analyticsExpense()
+                }), deleteAction: nil)
+            ]))
+            
+            groupDatesByDay(items).forEach({
+                sections.append(mapToSection(items: $0))
+            })
             
             self.tableViewAdapter.updateSections(sections)
             
-//            self.tableViewAdapter.updateSections(sections)
+            self.tableViewAdapter.afterDelete { [weak self] in
+                guard let amount = self?.output.getTotalAmount(), let filter = self?.output.selectedFilter() else { return }
+                self?.tableViewAdapter.updateCell(indexPath: .init(row: 0, section: 1), newModel: .init(cellType: TotalExpensesCell.self, model: TotalExpensesModel(fullSum: amount, startDate: self?.output.getStartDate(), endDate: self?.output.getEndDate(), filter: filter, analyticAction: { [weak self] in
+                    self?.output.analyticsExpense()
+                }), deleteAction: nil))
+            }
+            
         case .error:
             break
         }
     }
     
+    private func mapToSection(items: [ExpenseModelProtocol]) -> TableViewSection {
+        return .init(headerType: ExpenseHeaderView.self, model: ExpenseHeaderModel(date: items.first!.date), rows: items.map({ AnyTableRow(cellType: ExpensesTableViewCell.self, model: $0, deleteAction: { [weak self] model in
+            guard let model = model as? ExpenseModelProtocol else { return }
+            self?.output.remove(item: model)
+        }) }))
+    }
     
+    private func groupDatesByDay(_ dates: [ExpenseModelProtocol]) -> [[ExpenseModelProtocol]] {
+        let dateFormatter = DateFormatter.simpleFormatter
+        
+        // Группируем в словарь [String: [Date]]
+        let groupedDict = Dictionary(grouping: dates) { expense in
+            dateFormatter.string(from: expense.date)
+        }
+        
+        // Преобразуем словарь в массив массивов, отсортированный по дате
+        let sortedGroups = groupedDict.values.sorted { group1, group2 in
+            guard let firstDate1 = group1.first, let firstDate2 = group2.first else { return false }
+            return firstDate1.date > firstDate2.date
+        }
+        
+        return sortedGroups
+    }
 }
 

@@ -42,12 +42,12 @@ final class ExpensesTableViewCell: UITableViewCell, ConfigurableCell {
         contetntStackView.axis = .vertical
         
         backgroundCardView.addSubview(contetntStackView)
-        contetntStackView.addConstraintToSuperView([.top(8), .leading(8), .trailing(-8), .bottom(-8)])
+        contetntStackView.addConstraintToSuperView([.top(8), .leading(8), .trailing(-16), .bottom(-8)])
         
         namePriceStackView.axis = .horizontal
         namePriceStackView.spacing = 12
-        namePriceStackView.distribution = .fillProportionally
-        namePriceStackView.alignment = .trailing
+        namePriceStackView.distribution = .fill
+        namePriceStackView.alignment = .fill
         namePriceStackView.addArrangedSubviews(nameLabel, priceLabel)
         namePriceIconStackView.addArrangedSubview(iconImageView)
         contetntStackView.addArrangedSubview(namePriceIconStackView)
@@ -55,12 +55,23 @@ final class ExpensesTableViewCell: UITableViewCell, ConfigurableCell {
         namePriceVStackView.addArrangedSubview(namePriceStackView)
         namePriceVStackView.addArrangedSubview(timeLabel)
         namePriceVStackView.alignment = .leading
+        namePriceStackView.widthAnchor.constraint(equalTo: namePriceVStackView.widthAnchor).activated()
         
         namePriceVStackView.axis = .vertical
+        namePriceVStackView.spacing = 8
         namePriceIconStackView.axis = .horizontal
         namePriceIconStackView.alignment = .center
         namePriceIconStackView.spacing = 8
         iconImageView.setSize(width: 28, height: 28)
+        
+        priceLabel.font = .appFonts.neutralMedium
+        priceLabel.textColor = .appColors.text.primary
+        
+        nameLabel.font = .appFonts.secondaryLarge
+        nameLabel.textColor = .appColors.text.primary
+        
+        timeLabel.textColor = .appColors.text.secondary
+        timeLabel.font = .appFonts.secondaryLarge
     }
     
     func configure(with item: Any) {

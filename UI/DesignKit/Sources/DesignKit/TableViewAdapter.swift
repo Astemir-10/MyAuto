@@ -43,6 +43,7 @@ public struct TableViewSection {
 open class TableViewAdapter {
     private var sections: [TableViewSection] = []
     private let didSelectItem: ((Int, Int) -> Void)?
+    private var afterDeleteClosure: (() -> ())?
     private weak var tableView: UITableView?
     private lazy var delegateProxy: TableViewDelegateProxy = TableViewDelegateProxy(sectionsProvider: { [weak self] in self?.sections ?? [] }, didSelectItem: { [weak self] section, index in self?.didSelectItem?(section, index) })
 
@@ -54,9 +55,29 @@ open class TableViewAdapter {
         delegateProxy.deleteAdction = { [weak self] section, row in
             guard let self else { return }
             self.sections[section].rows[row].deleteAction?(self.sections[section].rows[row].model)
-            self.sections[section].rows.remove(at: row)
-            tableView.deleteRows(at: [IndexPath(row: row, section: section)], with: .automatic)
+            if self.sections[section].rows.count == 1 {
+                self.sections[section].rows.remove(at: row)
+                tableView.deleteRows(at: [IndexPath(row: row, section: section)], with: .automatic)
+
+                sections.remove(at: section)
+                tableView.deleteSections(.init(integer: section), with: .fade)
+            } else {
+                self.sections[section].rows.remove(at: row)
+                tableView.deleteRows(at: [IndexPath(row: row, section: section)], with: .automatic)
+            }
+            self.afterDeleteClosure?()
         }
+    }
+    
+    public func afterDelete(_ completion: @escaping () -> ()) {
+        self.afterDeleteClosure = completion
+    }
+    
+    public func updateCell(indexPath: IndexPath, newModel: AnyTableRow) {
+        guard sections.count > indexPath.section else { return }
+        sections[indexPath.section].rows.remove(at: indexPath.row)
+        sections[indexPath.section].rows.insert(newModel, at: indexPath.row)
+        tableView?.reloadRows(at: [indexPath], with: .none)
     }
     
     // Обновление данных секций
@@ -140,5 +161,9 @@ private class TableViewDelegateProxy: NSObject, UITableViewDataSource, UITableVi
             self.deleteAdction?(indexPath.section, indexPath.row)
             completion(true)
         })])
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        sectionsProvider()[section].headerType == nil ? 0 : UITableView.automaticDimension
     }
 }
