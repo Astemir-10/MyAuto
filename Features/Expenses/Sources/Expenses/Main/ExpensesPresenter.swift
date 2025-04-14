@@ -9,6 +9,7 @@ import Foundation
 import CombineCoreData
 import Combine
 import DesignKit
+import ReceiptReader
 
 enum ExpensesScreenState {
     case loading, loaded(sections: [ExpenseModelProtocol]), error
@@ -62,7 +63,11 @@ final class ExpensesPresenter: ExpensesViewOutput {
     }
     
     func addExpense(type: ExpenseType) {
-        self.router.openAddExpense(expenseType: type)
+        if case .qrCode = type {
+            self.router.openReceiptReader(output: self)
+        } else {
+            self.router.openAddExpense(expenseType: type)
+        }
     }
     
     func getTotalAmount() -> Double {
@@ -143,6 +148,8 @@ final class ExpensesPresenter: ExpensesViewOutput {
                                                 sum: expense.sum,
                                                 type: expenseType,
                                                 description: expense.expenseDescription))
+            case .qrCode:
+                break
             }
         })
         self.view?.setState(state: .loaded(sections: itemsWithFilter() ))
@@ -189,5 +196,17 @@ final class ExpensesPresenter: ExpensesViewOutput {
     
     func getEndDate() -> Date? {
         itemsWithFilter().first?.date
+    }
+}
+
+extension ExpensesPresenter: ReceiptReaderDelegate {
+    func didReadReceipt(with result: Result<String, ReceiptReader.ReceiptError>) {
+        switch result {
+        case .success(let receiptData):
+            print(receiptData)
+            
+        case .failure(let error):
+            print(error.localizedDescription)
+        }
     }
 }

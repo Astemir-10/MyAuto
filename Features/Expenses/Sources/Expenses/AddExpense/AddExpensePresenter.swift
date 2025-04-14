@@ -87,6 +87,8 @@ final class AddExpensePresenter: AddExpenseViewOutput {
                 })
                 .store(in: &self.cancellables)
             }
+        case .qrCode:
+            break
         }
     }
     

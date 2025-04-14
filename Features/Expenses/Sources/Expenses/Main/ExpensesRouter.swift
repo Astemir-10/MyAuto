@@ -7,10 +7,12 @@
 
 import Foundation
 import Architecture
+import ReceiptReader
 
 protocol ExpensesRouterInput: RouterInput {
     func openAddExpense(expenseType: ExpenseType)
     func openExpenseAnalytics()
+    func openReceiptReader(output: ReceiptReaderDelegate)
     func openExpenseDetails(expenseModel: ExpenseModelProtocol)
 }
 
@@ -30,5 +32,14 @@ final class ExpensesRouter: ExpensesRouterInput {
     func openExpenseDetails(expenseModel: ExpenseModelProtocol) {
         let viewController = ExpenseDetailsAssembly.assembly(expenseModel: expenseModel)
         transitionHandler.push(viewController)
+    }
+    
+    func openReceiptReader(output: ReceiptReaderDelegate) {
+        let vc = ReceiptReaderViewController()
+        vc.delegate = output
+        vc.withCancelButton = true
+        vc.needDissmisAfterRead = true
+        vc.modalPresentationStyle = .fullScreen
+        transitionHandler.present(vc)
     }
 }

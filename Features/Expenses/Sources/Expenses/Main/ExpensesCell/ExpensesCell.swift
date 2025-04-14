@@ -92,6 +92,8 @@ final class ExpensesTableViewCell: UITableViewCell, ConfigurableCell {
                 break
             case .fines:
                 break
+            case .qrCode:
+                break
             }
             
             if let model = item as? CommonExpense {

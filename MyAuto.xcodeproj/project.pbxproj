@@ -28,6 +28,7 @@
 		E284AE922CCD2EAD0008F5E6 /* AppData.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = E284AE902CCD2EAD0008F5E6 /* AppData.xcdatamodeld */; };
 		E28F473B2CD1CA8200AB0029 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28F473A2CD1CA8200AB0029 /* MainTabBarViewController.swift */; };
 		E298BC9E2D81E09B00A41351 /* CarDocumentRecognizer in Frameworks */ = {isa = PBXBuildFile; productRef = E298BC9D2D81E09B00A41351 /* CarDocumentRecognizer */; };
+		E2A3DB1E2DABEA2200A893D4 /* CarScanner in Frameworks */ = {isa = PBXBuildFile; productRef = E2A3DB1D2DABEA2200A893D4 /* CarScanner */; };
 		E2CF79402C6EB86600022D5F /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CF793F2C6EB86600022D5F /* MapViewController.swift */; };
 		E2CF79422C70BF8F00022D5F /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CF79412C70BF8F00022D5F /* ChatViewController.swift */; };
 		E2DCAEF22C9E3262006F4079 /* Architecture in Frameworks */ = {isa = PBXBuildFile; productRef = E2DCAEF12C9E3262006F4079 /* Architecture */; };
@@ -62,6 +63,7 @@
 			files = (
 				E271DB2D2D71BA9B00B27052 /* Calculator in Frameworks */,
 				E298BC9E2D81E09B00A41351 /* CarDocumentRecognizer in Frameworks */,
+				E2A3DB1E2DABEA2200A893D4 /* CarScanner in Frameworks */,
 				E22A80422CD5B17500ADEB73 /* Search in Frameworks */,
 				E22A80402CD2F32600ADEB73 /* AnyFormatter in Frameworks */,
 				E22A803E2CD2E46100ADEB73 /* Profile in Frameworks */,
@@ -217,6 +219,7 @@
 				E230800A2D75DD930047F42F /* Skeleton */,
 				E2FBEB692D7610F5007F685D /* WeatherEffects */,
 				E298BC9D2D81E09B00A41351 /* CarDocumentRecognizer */,
+				E2A3DB1D2DABEA2200A893D4 /* CarScanner */,
 			);
 			productName = MyAuto;
 			productReference = E226BE022C6AAE8800D8F389 /* MyAuto.app */;
@@ -547,6 +550,10 @@
 		E298BC9D2D81E09B00A41351 /* CarDocumentRecognizer */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CarDocumentRecognizer;
+		};
+		E2A3DB1D2DABEA2200A893D4 /* CarScanner */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CarScanner;
 		};
 		E2DCAEF12C9E3262006F4079 /* Architecture */ = {
 			isa = XCSwiftPackageProductDependency;

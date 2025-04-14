@@ -346,6 +346,7 @@ public struct AppImages {
         public let cloudSnow = SFIcon(name: "cloud.snow.fill")
         public let drizzle = SFIcon(name: "cloud.drizzle.fill")
         public let rain = UIImage.fromResources(by: "rain")
+        public let qrCode = SFIcon(name: "qrcode")
         public let heavyrain = SFIcon(name: "cloud.heavyrain.fill")
         public let snowflake = SFIcon(name: "snowflake")
         public let snow = SFIcon(name: "cloud.snow.fill")

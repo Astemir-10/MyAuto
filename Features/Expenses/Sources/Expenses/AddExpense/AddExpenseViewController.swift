@@ -82,6 +82,8 @@ final class AddExpenseViewController: CommonViewController {
         case .wash, .insurance, .taxes, .parking, .fines:
             contentStackView.addArrangedSubview(sumTextField)
             sumTextField.addConstraintToSuperView([.leading(20), .trailing(-20), .centerY(-100)])
+        case .qrCode:
+            break
         }
         
     }

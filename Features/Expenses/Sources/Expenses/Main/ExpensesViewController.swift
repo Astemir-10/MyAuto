@@ -11,10 +11,12 @@ import DesignTokens
 import Extensions
 
 enum ExpenseType: String, CaseIterable {
-    case petrol, service, wash, insurance, taxes, parking, fines
+    case petrol, service, wash, insurance, taxes, parking, fines, qrCode
     
     var icon: UIImage {
         switch self {
+        case .qrCode:
+            UIImage.appImages.sfIcons.qrCode.withSize(size: 32, weight: .regular)
         case .petrol:
             UIImage.emojiToImage(emoji: "⛽", size: 32)
         case .service:
@@ -34,8 +36,10 @@ enum ExpenseType: String, CaseIterable {
     
     var title: String {
         switch self {
+        case .qrCode:
+            "Чек"
         case .petrol:
-            "заправка"
+            "Заправка"
         case .service:
             "Автосервис"
         case .wash:

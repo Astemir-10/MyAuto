@@ -19,6 +19,7 @@ let package = Package(
         .package(name: "CombineCoreData", path: "../../CombineCoreData"),
         .package(name: "AppMap", path: "../../AppMap"),
         .package(name: "AppWidgets", path: "../../AppWidgets"),
+        .package(name: "ReceiptReader", path: "../../ReceiptReader"),
         
     ],
     targets: [
@@ -31,6 +32,7 @@ let package = Package(
                 "DesignTokens",
                 "CombineCoreData",
                 "AppMap",
+                "ReceiptReader",
                 "AppWidgets"
             ]),
     ]

@@ -6,9 +6,11 @@
 //
 
 import Architecture
+import ReceiptReader
 
 protocol AddExpenseRouterInput: RouterInput {
     func openPetrolList()
+    func openReceiptReader(output: ReceiptReaderDelegate)
 }
 
 final class AddExpenseRouter: AddExpenseRouterInput {
@@ -20,6 +22,12 @@ final class AddExpenseRouter: AddExpenseRouterInput {
     
     func openPetrolList() {
         let vc = PetrolsListAssembly.assembly()
+        transitionHandler.push(vc)
+    }
+    
+    func openReceiptReader(output: ReceiptReaderDelegate) {
+        let vc = ReceiptReaderViewController()
+        vc.delegate = output
         transitionHandler.push(vc)
     }
 }

@@ -15,6 +15,7 @@ import Calculator
 import Expenses
 import DesignTokens
 import Documents
+import CarScanner
 
 final class MainTabBarViewController: UITabBarController {
         
@@ -32,11 +33,15 @@ final class MainTabBarViewController: UITabBarController {
             
             let expensesVC = ExpensesAssembly.assembly()
             expensesVC.tabBarItem = UITabBarItem(title: "Расходы", image: UIImage.appImages.sfIcons.dollar.icon, tag: 2)
-            
+
+            let carScanner = CarScannerAssembly.assembly()
+            carScanner.tabBarItem = UITabBarItem(title: "Сканнер", image: UIImage.appImages.sfIcons.car.icon, tag: 3)
+
             let profileVC = ProfileAssmebly.assembly()
-            profileVC.tabBarItem = UITabBarItem(title: "Профиль", image: UIImage.appImages.sfIcons.user.icon, tag: 3)
+            profileVC.tabBarItem = UITabBarItem(title: "Профиль", image: UIImage.appImages.sfIcons.user.icon, tag: 4)
             
-            viewControllers = [homeVC, documentsVC, expensesVC, profileVC]
+            
+            viewControllers = [homeVC, documentsVC, expensesVC, carScanner, profileVC]
             
             let appearance = UITabBarAppearance()
             appearance.backgroundColor = UIColor.appColors.ui.tabBar.background // Цвет самого таббара
