@@ -54,7 +54,7 @@ public final class BluetoothOBDConnector: NSObject, OBDConnector, CBCentralManag
         connectionsPeripheral.append(peripheral)
         if !connections.contains(where: { $0.id == peripheral.identifier.uuidString }) {
             if let name = peripheral.name {
-                connections.append(.init(name: name, id: peripheral.identifier.uuidString))
+                connections.append(.init(name: name, id: peripheral.identifier.uuidString, isConnected: peripheral.state == .connected))
             }
         }
     }

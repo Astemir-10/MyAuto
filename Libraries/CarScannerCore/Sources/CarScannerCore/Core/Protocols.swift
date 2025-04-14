@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol OBDCommand {
+public protocol OBDCommandItem {
     var command: String { get }
     func parse(response: String) throws -> OBDResult
 }

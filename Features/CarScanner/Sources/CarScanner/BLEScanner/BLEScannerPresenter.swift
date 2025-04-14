@@ -8,6 +8,7 @@
 import Foundation
 import CarScannerCore
 import Combine
+import UserDefaultsExtensions
 
 protocol BLEScannerViewOutput {
     func setup()
@@ -49,6 +50,7 @@ final class BLEScannerPresenter: BLEScannerViewOutput {
             guard let self else { return }
             do {
                 let transport = try await self.connector.connect(id: items[index].id)
+                UserDefaults.appDefaults.set(name: .obdScannerId, string: items[index].id)
                 self.moduleOutput?.didConnectDevice(transport: transport)
                 self.view?.dismissVC()
             } catch {

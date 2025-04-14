@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class RPMCommand: OBDCommand {
+final class RPMCommand: OBDCommandItem {
     var command: String { "010C" } // PID для RPM
 
     func parse(response: String) throws -> OBDResult {

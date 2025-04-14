@@ -17,6 +17,8 @@ let package = Package(
         .package(name: "Extensions", path: "../../Extensions"),
         .package(name: "DesignTokens", path: "../../DesignTokens"),
         .package(name: "CarScannerCore", path: "../../CarScannerCore"),
+        .package(name: "UserDefaultsExtensions", path: "../../UserDefaultsExtensions"),
+        
         
     ],
     targets: [
@@ -27,7 +29,8 @@ let package = Package(
                 "GlobalServiceLocator",
                 "Extensions",
                 "DesignTokens",
-                "CarScannerCore"
+                "CarScannerCore",
+                "UserDefaultsExtensions"
             ]),
     ]
 )

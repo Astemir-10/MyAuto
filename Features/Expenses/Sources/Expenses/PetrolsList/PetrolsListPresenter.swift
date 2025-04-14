@@ -10,6 +10,7 @@ import AppServices
 import CombineCoreData
 import CoreLocation
 import Combine
+import UserDefaultsExtensions
 
 protocol PetrolsListViewInput: AnyObject {
     func setState(_ state: PetrolsListScreenState)
@@ -37,14 +38,14 @@ final class PetrolsListPresenter {
         self.view = view
         self.petrolService = petrolService
         self.storage = storage
-        let longitude = UserDefaults.standard.double(forKey: "userLongitude")
-        let latitude = UserDefaults.standard.double(forKey: "userLatitude")
+        let longitude = UserDefaults.appDefaults.double(by: .userLongitude)
+        let latitude =  UserDefaults.appDefaults.double(by: .userLatitude)
         if longitude != 0 && latitude != 0 {
             userLocation = .init(latitude: latitude, longitude: longitude)
         } else {
             self.userLocation = nil
         }
-        if let userRegion = UserDefaults.standard.string(forKey: "userRegion") {
+        if let userRegion = UserDefaults.appDefaults.string(by: .userRegion) {
             self.userRegion = userRegion
         } else {
             self.userRegion = nil

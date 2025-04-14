@@ -11,6 +11,7 @@ import Combine
 public struct OBDConnectionModel {
     public let name: String
     public let id: String
+    public var isConnected: Bool
 }
 
 public enum OBDConnectorError: Error {

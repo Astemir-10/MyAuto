@@ -2,38 +2,30 @@
 import PackageDescription
 
 let package = Package(
-    name: "AppWidgets",
+    name: "KnowledgeBook",
     platforms: [
         .iOS(.v15),
     ],
     products: [
         .library(
-            name: "AppWidgets",
-            targets: ["AppWidgets"]),
+            name: "KnowledgeBook",
+            targets: ["KnowledgeBook"]),
     ],
     dependencies: [
         .package(name: "DesignKit", path: "../../DesignKit"),
         .package(name: "GlobalServiceLocator", path: "../../GlobalServiceLocator"),
         .package(name: "Extensions", path: "../../Extensions"),
         .package(name: "DesignTokens", path: "../../DesignTokens"),
-        .package(name: "AppMap", path: "../../AppMap"),
-        .package(name: "Skeleton", path: "../../Skeleton"),
-        .package(name: "WeatherEffects", path: "../../WeatherEffects"),
-        .package(name: "UserDefaultsExtensions", path: "../../UserDefaultsExtensions"),
         
     ],
     targets: [
         .target(
-            name: "AppWidgets",
+            name: "KnowledgeBook",
             dependencies: [
                 "DesignKit",
                 "GlobalServiceLocator",
                 "Extensions",
                 "DesignTokens",
-                "AppMap",
-                "Skeleton",
-                "WeatherEffects",
-                "UserDefaultsExtensions"
             ]),
     ]
 )

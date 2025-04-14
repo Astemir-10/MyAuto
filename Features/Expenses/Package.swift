@@ -20,6 +20,7 @@ let package = Package(
         .package(name: "AppMap", path: "../../AppMap"),
         .package(name: "AppWidgets", path: "../../AppWidgets"),
         .package(name: "ReceiptReader", path: "../../ReceiptReader"),
+        .package(name: "UserDefaultsExtensions", path: "../../UserDefaultsExtensions"),
         
     ],
     targets: [
@@ -33,7 +34,8 @@ let package = Package(
                 "CombineCoreData",
                 "AppMap",
                 "ReceiptReader",
-                "AppWidgets"
+                "AppWidgets",
+                "UserDefaultsExtensions"
             ]),
     ]
 )

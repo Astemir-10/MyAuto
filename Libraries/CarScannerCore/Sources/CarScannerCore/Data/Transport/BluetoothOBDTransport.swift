@@ -15,47 +15,64 @@ enum BluetoothError: Error {
     case notConnected
 }
 
-final class BluetoothOBDTransport: NSObject, OBDTransport, CBCentralManagerDelegate {
-    private lazy var manager: CBCentralManager = {
-        .init(delegate: self, queue: .global())
-    }()
-    private let peripheral: CBPeripheral
-    
-    @Published private var state: TransportState = .disconnected
-    var statePublisher: AnyPublisher<TransportState, Never> {
-        $state.eraseToAnyPublisher()
-    }
-        
+final class BluetoothOBDTransport: NSObject, CBCentralManagerDelegate, OBDTransport {
     var isConnected: Bool {
         state == .connected
     }
     
+    @Published var state: TransportState
+    var statePublisher: AnyPublisher<TransportState, Never> {
+        $state.eraseToAnyPublisher()
+    }
     
+    private var centralManager: CBCentralManager!
+    private let peripheral: CBPeripheral
+    private var writeCharacteristic: CBCharacteristic?
+    
+    private lazy var queueProcessor = CommandQueueProcessor(transport: self)
+
     init(peripheral: CBPeripheral) {
         self.peripheral = peripheral
+        switch peripheral.state {
+        case .disconnected:
+            state = .disconnected
+        case .connecting:
+            state = .connecting
+        case .connected:
+            state = .connected
+        case .disconnecting:
+            state = .disconnecting
+        @unknown default:
+            state = .failed(TransportError.notReady)
+        }
         super.init()
-        print(peripheral.state.rawValue)
+        centralManager = CBCentralManager(delegate: self, queue: nil)
     }
-    
-    func connect() async throws {
-    }
-    
-    func disconnect() {
-        
-    }
-    
-    func send(command: String) async throws -> String {
-       ""
+
+    func send(command: OBDCommandItem) async throws -> String {
+        try await queueProcessor.enqueue(command)
     }
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        print("\n\n-----CHANGE STATE----")
-        print(central.state.rawValue)
-        print("\n\n")
+        
     }
-    
-    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        print("DID DISCOVER")
-        print(peripheral.name)
+}
+
+extension BluetoothOBDTransport: OBDCommandSending {
+    func sendRaw(_ data: Data) throws {
+        guard let characteristic = writeCharacteristic else {
+            throw TransportError.notReady
+        }
+        peripheral.writeValue(data, for: characteristic, type: .withResponse)
+    }
+}
+
+extension BluetoothOBDTransport: CBPeripheralDelegate {
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
+        guard error == nil else { return }
+
+        if let data = characteristic.value {
+            queueProcessor.handleResponse(data: data)
+        }
     }
 }

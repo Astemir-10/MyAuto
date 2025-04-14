@@ -14,6 +14,7 @@ import Extensions
 import Networking
 import MapKit
 import AppMap
+import UserDefaultsExtensions
 
 protocol PetrolWidgetViewInput: WidgetViewInput {
     
@@ -157,7 +158,7 @@ final class PetrolWidgetPresenter {
                       let regionCode = regions.regions.first(where: { $0.value.lowercased() == geoInfo.region.lowercased() })?.id else {
                     return .fail(error: .networkError)
                 }
-                UserDefaults.standard.setValue(regionCode, forKey: "userRegion")
+                UserDefaults.appDefaults.set(name: .userRegion, string: regionCode)
                 self.currentRegion = regionCode
                 return Just(regionCode).setFailureType(to: CoreError.self).eraseToAnyPublisher()
             })
@@ -247,8 +248,8 @@ extension PetrolWidgetPresenter: PetrolWidgetViewOutput {
 
 extension PetrolWidgetPresenter: LocationManagerDelegate {
     func didUpdateLocation(location: GeoInfo, totalAccuracy: Double) {
-        UserDefaults.standard.set(location.latitude, forKey: "userLatitude")
-        UserDefaults.standard.set(location.longitude, forKey: "userLongitude")
+        UserDefaults.appDefaults.set(name: .userLatitude, string: location.latitude)
+        UserDefaults.appDefaults.set(name: .userLongitude, string: location.longitude)
         self.requests(geoInfo: location)
     }
     

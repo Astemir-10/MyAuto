@@ -10,6 +10,7 @@ import Combine
 
 public enum TransportState {
     case disconnected
+    case disconnecting
     case connecting
     case connected
     case failed(Error)
@@ -32,9 +33,9 @@ extension TransportState: Equatable {
 
 public protocol OBDTransport {
     var statePublisher: AnyPublisher<TransportState, Never> { get }
-    func connect() async throws
-    func disconnect()
-    func send(command: String) async throws -> String
+//    func connect() async throws
+//    func disconnect()
+    func send(command: OBDCommandItem) async throws -> String
     var isConnected: Bool { get }
 }
 

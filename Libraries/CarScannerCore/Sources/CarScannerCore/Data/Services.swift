@@ -69,29 +69,29 @@ final class DefaultOBDExecutor: OBDExecutor {
     }
     
     func connect() async throws {
-        guard connectionState != .connecting else { return }
-        
-        await updateState(.connecting)
-        do {
-            try await transport.connect()
-            await updateState(.connected)
-        } catch {
-            await updateState(.error(error))
-            throw error
-        }
+//        guard connectionState != .connecting else { return }
+//        
+//        await updateState(.connecting)
+//        do {
+//            try await transport.connect()
+//            await updateState(.connected)
+//        } catch {
+//            await updateState(.error(error))
+//            throw error
+//        }
     }
     
     func disconnect() async throws {
-        transport.disconnect()
-        await updateState(.disconnected)
+//        transport.disconnect()
+//        await updateState(.disconnected)
     }
     
-    func execute(command: OBDCommand) async throws -> OBDResult {
+    func execute(command: OBDCommandItem) async throws -> OBDResult {
         guard transport.isConnected else {
             throw OBDExecutorError.notConnected
         }
         
-        let raw = try await transport.send(command: command.command)
+        let raw = try await transport.send(command: command)
         return try command.parse(response: raw)
     }
     
@@ -111,6 +111,8 @@ final class DefaultOBDExecutor: OBDExecutor {
             connectionState = .disconnected
         case .failed(let error):
             connectionState = .error(error)
+        case .disconnecting:
+            connectionState = .disconnected
         }
     }
 }

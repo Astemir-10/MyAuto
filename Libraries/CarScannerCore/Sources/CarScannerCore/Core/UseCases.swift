@@ -17,7 +17,7 @@ public enum ConnectionState {
 
 public protocol OBDExecutor {
     var connectionStatePublisher: AnyPublisher<ConnectionState, Never> { get }
-    func execute(command: OBDCommand) async throws -> OBDResult
+    func execute(command: OBDCommandItem) async throws -> OBDResult
     func connect() async throws
     func disconnect() async throws
 }
