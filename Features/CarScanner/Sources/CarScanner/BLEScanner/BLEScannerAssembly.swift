@@ -13,9 +13,9 @@ protocol BLEScannerModuleOutput: AnyObject {
 }
 
 enum BLEScannerAssembly {
-    static func assemblyBLE(moduleOutput: BLEScannerModuleOutput) -> UIViewController {
+    static func assemblyBLE(connector: OBDConnector, moduleOutput: BLEScannerModuleOutput) -> UIViewController {
         let vc = BLEScannerViewController()
-        let presenter = BLEScannerPresenter(moduleOutput: moduleOutput, connector: BluetoothOBDConnector(), view: vc)
+        let presenter = BLEScannerPresenter(moduleOutput: moduleOutput, connector: connector, view: vc)
         vc.output = presenter
         return vc
     }

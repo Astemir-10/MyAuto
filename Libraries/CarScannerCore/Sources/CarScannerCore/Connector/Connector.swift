@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import CoreBluetooth
 
 public struct OBDConnectionModel {
     public let name: String
@@ -15,13 +16,17 @@ public struct OBDConnectionModel {
 }
 
 public enum OBDConnectorError: Error {
-    case notFound, failedConnection
+    case notFound, failedConnection, failedReconnection
 }
 
 public protocol OBDConnector {
     var dicoveredConnections: AnyPublisher<[OBDConnectionModel], Never> { get }
-    
+    func reconnect() async throws
     func startScan()
     func stopScan()
-    func connect(id: String) async throws -> OBDTransport
+    func connect(id: String) async throws
+}
+
+protocol OBDBluetoothConnector {
+    func connectedDevice() async -> CBPeripheral?
 }

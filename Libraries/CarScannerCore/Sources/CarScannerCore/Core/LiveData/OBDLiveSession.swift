@@ -7,10 +7,11 @@
 
 import Combine
 
-public protocol OBDLiveSession {
+protocol OBDLiveSession {
+    func setCommands(commands: [any OBDCommandItem])
     func start()
     func stop()
     func pause()
     func resume()
-    var output: AnyPublisher<OBDResult, Never> { get }
+    var output: AnyPublisher<OBDCommandResult, Never> { get }
 }

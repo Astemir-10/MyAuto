@@ -6,16 +6,24 @@
 //
 
 import Architecture
+import CarScannerCore
 
 protocol CarScannerRouterInput: RouterInput {
-    func openBLEScanner(moduleOutput: BLEScannerModuleOutput)
+    func openBLEScanner(connector: OBDConnector, moduleOutput: BLEScannerModuleOutput)
+    func openConsole(queueCommands: [String])
 }
 
 final class CarScannerRouter: CarScannerRouterInput {
     weak var transitionHandler: TransitionHandler!
     
-    func openBLEScanner(moduleOutput: BLEScannerModuleOutput) {
-        let vc = BLEScannerAssembly.assemblyBLE(moduleOutput: moduleOutput)
+    func openBLEScanner(connector: OBDConnector, moduleOutput: BLEScannerModuleOutput) {
+        let vc = BLEScannerAssembly.assemblyBLE(connector: connector, moduleOutput: moduleOutput)
         transitionHandler.present(vc)
+    }
+    
+    func openConsole(queueCommands: [String]) {
+        let consoleVC = ConsoleVC()
+        consoleVC.commands = queueCommands
+        transitionHandler.present(consoleVC)
     }
 }

@@ -26,7 +26,7 @@ import Combine
 
 
 enum OBDExecutorError: Error {
-    case notConnected
+    case notConnected, resultType
 }
 
 extension ConnectionState: Equatable {
@@ -44,75 +44,3 @@ extension ConnectionState: Equatable {
     }
 }
 
-
-final class DefaultOBDExecutor: OBDExecutor {
-    private let transport: OBDTransport
-    
-    // Хранимое состояние
-    @Published private var connectionState: ConnectionState = .disconnected
-    
-    // Combine publisher
-    var connectionStatePublisher: AnyPublisher<ConnectionState, Never> {
-        $connectionState.eraseToAnyPublisher()
-    }
-    
-    private var cancellables = Set<AnyCancellable>()
-    
-    init(transport: OBDTransport) {
-        self.transport = transport
-        transport.statePublisher
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] transportState in
-                    self?.handleTransportStateChange(transportState)
-                }
-                .store(in: &cancellables)
-    }
-    
-    func connect() async throws {
-//        guard connectionState != .connecting else { return }
-//        
-//        await updateState(.connecting)
-//        do {
-//            try await transport.connect()
-//            await updateState(.connected)
-//        } catch {
-//            await updateState(.error(error))
-//            throw error
-//        }
-    }
-    
-    func disconnect() async throws {
-//        transport.disconnect()
-//        await updateState(.disconnected)
-    }
-    
-    func execute(command: OBDCommandItem) async throws -> OBDResult {
-        guard transport.isConnected else {
-            throw OBDExecutorError.notConnected
-        }
-        
-        let raw = try await transport.send(command: command)
-        return try command.parse(response: raw)
-    }
-    
-    private func updateState(_ newState: ConnectionState) async {
-        await MainActor.run {
-            self.connectionState = newState
-        }
-    }
-    
-    private func handleTransportStateChange(_ transportState: TransportState) {
-        switch transportState {
-        case .connected:
-            connectionState = .connected
-        case .connecting:
-            connectionState = .connecting
-        case .disconnected:
-            connectionState = .disconnected
-        case .failed(let error):
-            connectionState = .error(error)
-        case .disconnecting:
-            connectionState = .disconnected
-        }
-    }
-}

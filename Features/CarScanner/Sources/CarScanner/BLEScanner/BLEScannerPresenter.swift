@@ -49,13 +49,11 @@ final class BLEScannerPresenter: BLEScannerViewOutput {
         Task { [weak self] in
             guard let self else { return }
             do {
-                let transport = try await self.connector.connect(id: items[index].id)
+                try await self.connector.connect(id: items[index].id)
                 UserDefaults.appDefaults.set(name: .obdScannerId, string: items[index].id)
-                self.moduleOutput?.didConnectDevice(transport: transport)
                 self.view?.dismissVC()
             } catch {
                 print(error)
-                
             }
             
         }

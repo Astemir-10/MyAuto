@@ -8,7 +8,7 @@
 import Foundation
 
 public enum OBDModuleFactory {
-    public static func makeBluetoothOBDExecutor(transport: OBDTransport) -> OBDExecutor {
-        return DefaultOBDExecutor(transport: transport)
+    public static func makeBluetoothOBDExecutor() -> OBDSessionManager {
+        return OBDSessionManagerImpl()
     }
 }

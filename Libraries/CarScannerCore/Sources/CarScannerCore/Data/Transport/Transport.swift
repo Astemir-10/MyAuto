@@ -9,19 +9,22 @@ import Foundation
 import Combine
 
 public enum TransportState {
-    case disconnected
-    case disconnecting
-    case connecting
-    case connected
+    case poweredOn
+    case poweredOff
+    case unauthorized
+    case unsupported
+    case unknown
     case failed(Error)
 }
 
 extension TransportState: Equatable {
     public static func == (lhs: TransportState, rhs: TransportState) -> Bool {
         switch (lhs, rhs) {
-        case (.disconnected, .disconnected),
-             (.connecting, .connecting),
-             (.connected, .connected):
+        case
+            (.poweredOn, .poweredOn),
+            (.poweredOff, .poweredOff),
+            (.unauthorized, .unauthorized),
+            (.unsupported, .unsupported):
             return true
         case (.failed, .failed):
             return true // или false, если ошибки важно различать
@@ -32,11 +35,11 @@ extension TransportState: Equatable {
 }
 
 public protocol OBDTransport {
-    var statePublisher: AnyPublisher<TransportState, Never> { get }
-//    func connect() async throws
-//    func disconnect()
-    func send(command: OBDCommandItem) async throws -> String
+    var transportStatePublisher: AnyPublisher<TransportState, Never> { get }
+    var connectionStatePublisher: AnyPublisher<ConnectionState, Never> { get }
     var isConnected: Bool { get }
+    func reconnect()
+    func send(command: any CommandItem) async throws -> String
 }
 
 /*

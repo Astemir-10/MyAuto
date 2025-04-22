@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol OBDCommandItem {
-    var command: String { get }
-    func parse(response: String) throws -> OBDResult
+public struct CommandResponse<C: CommandItem> {
+    public let command: C
+    public let result: Result<C.Result, Error>
 }

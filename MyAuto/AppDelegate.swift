@@ -8,6 +8,10 @@
 import UIKit
 import Networking
 
+
+
+// Пример использования:
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -16,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        YMKMapKit.setApiKey("65abadca-2980-4847-bc00-69ed1e9a1fda")
 //        YMKMapKit.sharedInstance()
         UIApplication.cleanCache()
+        
         return true
     }
 

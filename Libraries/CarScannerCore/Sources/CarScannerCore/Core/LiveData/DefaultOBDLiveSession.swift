@@ -8,24 +8,33 @@
 import Foundation
 import Combine
 
-public final class DefaultOBDLiveSession: OBDLiveSession {
-    private let executor: OBDExecutor
-    private let commands: [any OBDCommandItem]
+final class DefaultOBDLiveSession: OBDLiveSession {
+    private let executor: OBDCommandExecutor
+    private var commands: [any OBDCommandItem]
     private let interval: TimeInterval
     private var cancellable: AnyCancellable?
-    private let subject = PassthroughSubject<OBDResult, Never>()
+    private let subject = PassthroughSubject<OBDCommandResult, Never>()
     private var isPaused: Bool = false
 
-    public var output: AnyPublisher<OBDResult, Never> {
+    public var output: AnyPublisher<OBDCommandResult, Never> {
         subject.eraseToAnyPublisher()
     }
 
-    public init(executor: OBDExecutor,
+    public init(executor: OBDCommandExecutor,
                 commands: [any OBDCommandItem],
                 interval: TimeInterval = 0.5) {
         self.executor = executor
         self.commands = commands
         self.interval = interval
+    }
+    
+    public func setCommands(commands: [any OBDCommandItem]) {
+        self.commands = commands
+
+        if cancellable == nil && !isPaused {
+            self.stop()
+            self.start()
+        }
     }
 
     public func start() {

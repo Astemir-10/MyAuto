@@ -9,5 +9,7 @@ import Foundation
 
 enum OBDParsingError: Error {
     case invalidResponse
+    case invalidWithMessage(message: String)
     case unsupportedFormat
+    case valueOutOfRange
 }

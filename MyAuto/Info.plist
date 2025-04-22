@@ -2,16 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Дай доступ к bluetooth</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Дай доступ к bluetooth</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Доступ к фото</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Дайте доступ к камере</string>
-	<key>NSLocationUsageDescription</key>
-	<string>Нам необходим доступ к геолокации</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -25,21 +15,15 @@
 			</dict>
 			<key>idp.vender.domain</key>
 			<dict>
-				<key>NSIncludesSubdomains</key>
-				<true/>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
 				<key>NSExceptionRequiresForwardSecrecy</key>
 				<false/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
 			</dict>
 		</dict>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Нам необходим доступ к геолокации</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Нам необходим доступ к геолокации</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Нам необходим доступ к геолокации</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -57,5 +41,12 @@
 			</array>
 		</dict>
 	</dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>bluetooth-peripheral</string>
+		<string>fetch</string>
+		<string>processing</string>
+		<string>bluetooth-central</string>
+	</array>
 </dict>
 </plist>

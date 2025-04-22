@@ -12,12 +12,10 @@ public enum ConnectionState {
     case disconnected
     case connecting
     case connected
+    case disconnecting
     case error(Error)
 }
 
-public protocol OBDExecutor {
-    var connectionStatePublisher: AnyPublisher<ConnectionState, Never> { get }
-    func execute(command: OBDCommandItem) async throws -> OBDResult
-    func connect() async throws
-    func disconnect() async throws
+protocol OBDCommandExecutor {
+    func execute(command: any CommandItem) async throws -> OBDCommandResult
 }

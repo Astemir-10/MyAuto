@@ -7,8 +7,13 @@
 
 import Foundation
 
+public protocol CommandItem {
+    associatedtype Result
+    var command: String { get }
+    func parse(response: String) throws -> Result
+}
 
-public struct OBDCommand {
-    let command: OBDCommandItem
-    let continuation: CheckedContinuation<String, Error>
+public struct Command {
+    public let command: any CommandItem
+    public let continuation: CheckedContinuation<String, Error>
 }
