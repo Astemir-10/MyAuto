@@ -9,10 +9,13 @@ import Foundation
 import Combine
 import CoreBluetooth
 
-public struct OBDConnectionModel {
+public struct OBDModel {
     public let name: String
     public let id: String
-    public var isConnected: Bool
+    public let connectionState: ConnectionState
+    public var isConnected: Bool {
+        connectionState == .connected || connectionState == .ready
+    }
 }
 
 public enum OBDConnectorError: Error {
@@ -20,7 +23,7 @@ public enum OBDConnectorError: Error {
 }
 
 public protocol OBDConnector {
-    var dicoveredConnections: AnyPublisher<[OBDConnectionModel], Never> { get }
+    var dicoveredConnections: AnyPublisher<[OBDModel], Never> { get }
     func reconnect() async throws
     func startScan()
     func stopScan()

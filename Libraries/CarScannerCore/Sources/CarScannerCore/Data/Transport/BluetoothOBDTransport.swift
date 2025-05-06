@@ -23,11 +23,11 @@ enum BluetoothError: Error {
 final class BluetoothOBDTransport: NSObject, OBDTransport {
     
     var isConnected: Bool {
-        connectionState == .connected
+        connectionState.isConnected
     }
     
-    @Published var connectionState: ConnectionState
-    var connectionStatePublisher: AnyPublisher<ConnectionState, Never> {
+    @Published var connectionState: OBDModel
+    var connectionStatePublisher: AnyPublisher<OBDModel, Never> {
         $connectionState.eraseToAnyPublisher()
     }
     
@@ -36,8 +36,10 @@ final class BluetoothOBDTransport: NSObject, OBDTransport {
         $state.eraseToAnyPublisher()
     }
     
-    @Published var discoveredPrh: [OBDConnectionModel] = []
+    @Published var discoveredPrh: [OBDModel] = []
     private var discoveredPeripheral: [CBPeripheral] = []
+    private var settingNotify = false
+    private var settingWrite = false
     
     private var peripheral: CBPeripheral?
     private var writeCharacteristic: CBCharacteristic?
@@ -47,7 +49,7 @@ final class BluetoothOBDTransport: NSObject, OBDTransport {
     private lazy var queueProcessor = CommandQueueProcessor(transport: self)
     
     override init() {
-        connectionState = .disconnected
+        connectionState = .init(name: "", id: "", connectionState: .disconnected)
         super.init()
         CentralManagerProvider.shared.centralManager.delegate = self
         CentralManagerProvider.shared.centralManager.registerForConnectionEvents()
@@ -78,18 +80,28 @@ final class BluetoothOBDTransport: NSObject, OBDTransport {
         }
     }
     
-    private func updateConnectionState(state: CBPeripheralState) {
-        switch state {
+    private func updateConnectionState(peripheral: CBPeripheral) {
+        switch peripheral.state {
         case .disconnected:
-            self.connectionState = .disconnected
+            self.connectionState = .init(name: peripheral.name ?? "OBD",
+                                         id: peripheral.identifier.uuidString,
+                                         connectionState: .disconnected)
         case .connecting:
-            self.connectionState = .connecting
+            self.connectionState = .init(name: peripheral.name ?? "OBD",
+                                         id: peripheral.identifier.uuidString,
+                                         connectionState: .connecting)
         case .connected:
-            self.connectionState = .connected
+            self.connectionState = .init(name: peripheral.name ?? "OBD",
+                                         id: peripheral.identifier.uuidString,
+                                         connectionState: .connected)
         case .disconnecting:
-            self.connectionState = .disconnecting
+            self.connectionState = .init(name: peripheral.name ?? "OBD",
+                                         id: peripheral.identifier.uuidString,
+                                         connectionState: .disconnecting)
         @unknown default:
-            self.connectionState = .error(ConnectionError.someError)
+            self.connectionState = .init(name: peripheral.name ?? "OBD",
+                                         id: peripheral.identifier.uuidString,
+                                         connectionState: .error(TransportError.notReady))
         }
     }
     
@@ -112,7 +124,7 @@ extension BluetoothOBDTransport: CBCentralManagerDelegate {
         peripheral.delegate = self
         peripheral.discoverServices(nil)
         guard let currentPeripheral = self.peripheral, currentPeripheral.identifier == peripheral.identifier else { return }
-        updateConnectionState(state: peripheral.state)
+        updateConnectionState(peripheral: peripheral)
     }
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: (any Error)?) {
@@ -120,17 +132,23 @@ extension BluetoothOBDTransport: CBCentralManagerDelegate {
         self.connectorContituation?.resume(throwing: OBDConnectorError.failedConnection)
         guard let currentPeripheral = self.peripheral, currentPeripheral.identifier == peripheral.identifier else { return }
         if let error {
-            self.connectionState = .error(error)
+            self.connectionState = .init(name: peripheral.name ?? "OBD",
+                                         id: peripheral.identifier.uuidString,
+                                         connectionState: .error(error))
+        } else {
+            updateConnectionState(peripheral: peripheral)
         }
-        updateConnectionState(state: peripheral.state)
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: (any Error)?) {
         guard let currentPeripheral = self.peripheral, currentPeripheral.identifier == peripheral.identifier else { return }
         if let error {
-            self.connectionState = .error(error)
+            self.connectionState = .init(name: peripheral.name ?? "OBD",
+                                         id: peripheral.identifier.uuidString,
+                                         connectionState: .error(error))
+        } else {
+            updateConnectionState(peripheral: peripheral)
         }
-        updateConnectionState(state: peripheral.state)
     }
 }
 
@@ -148,8 +166,7 @@ extension BluetoothOBDTransport: CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         guard let currentPeripheral = self.peripheral, currentPeripheral.identifier == peripheral.identifier else { return }
         
-        if let data = characteristic.value {
-            print(String(data: data, encoding: .utf8))
+        if let data = characteristic.value, String(data: data, encoding: .utf8) != nil {
             queueProcessor.handleResponse(data: data)
         }
     }
@@ -169,21 +186,30 @@ extension BluetoothOBDTransport: CBPeripheralDelegate {
         for characteristic in service.characteristics ?? [] {
             if characteristic.uuid.uuidString == "FFF2" {
                 self.writeCharacteristic = characteristic
+                settingWrite = true
+                if settingWrite && settingNotify {
+                    
+                    connectionState = .init(name: peripheral.name ?? "OBD", id: peripheral.identifier.uuidString, connectionState: .ready)
+                }
             }
             if characteristic.uuid == CBUUID(string: "FFF1") {
                 peripheral.setNotifyValue(true, for: characteristic)
+                settingNotify = true
+                if settingWrite && settingNotify {
+                    connectionState = .init(name: peripheral.name ?? "OBD", id: peripheral.identifier.uuidString, connectionState: .ready)
+                }
             }
         }
     }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         discoveredPeripheral.append(peripheral)
-        discoveredPrh.append(.init(name: peripheral.name ?? "", id: peripheral.identifier.uuidString, isConnected: peripheral.state == .connected))
+        discoveredPrh.append(.init(name: peripheral.name ?? "OBD", id: peripheral.identifier.uuidString, connectionState: peripheral.state.connectionState))
     }
 }
 
 extension BluetoothOBDTransport: OBDConnector {
-    var dicoveredConnections: AnyPublisher<[OBDConnectionModel], Never> {
+    var dicoveredConnections: AnyPublisher<[OBDModel], Never> {
         $discoveredPrh.eraseToAnyPublisher()
     }
     
@@ -220,6 +246,23 @@ extension BluetoothOBDTransport: OBDConnector {
         try await withCheckedThrowingContinuation { [weak self] contintuation in
             self?.connectorContituation = contintuation
             CentralManagerProvider.shared.centralManager.connect(peripheral)
+        }
+    }
+}
+
+extension CBPeripheralState {
+    var connectionState: ConnectionState {
+        switch self {
+        case .disconnected:
+                .disconnected
+        case .connecting:
+                .connecting
+        case .connected:
+                .connected
+        case .disconnecting:
+                .disconnecting
+        @unknown default:
+                .error(ConnectionError.someError)
         }
     }
 }

@@ -13,7 +13,8 @@ public enum ProfileAssmebly {
     public static func assembly() -> UIViewController {
         let vc = ProfileViewController()
         let router = ProfileRouter()
-        let presenter = ProfilePresenter(storageService: GlobalServiceLocator.shared.getService(), view: vc, router: router)
+        router.transitionHandler = vc
+        let presenter = ProfilePresenter(keychain: GlobalServiceLocator.shared.getService(), authService: GlobalServiceLocator.shared.getService(), storageService: GlobalServiceLocator.shared.getService(), view: vc, router: router)
         vc.output = presenter
         return vc
     }

@@ -18,6 +18,9 @@ let package = Package(
         .package(name: "DesignTokens", path: "../../DesignTokens"),
         .package(name: "CombineCoreData", path: "../../CombineCoreData"),
         .package(name: "CarInfo", path: "../../CarInfo"),
+        .package(name: "AppKeychain", path: "../../AppKeychain"),
+        .package(name: "UserDefaultsExtensions", path: "../../UserDefaultsExtensions"),
+        
         
     ],
     targets: [
@@ -29,7 +32,9 @@ let package = Package(
                 "Extensions",
                 "DesignTokens",
                 "CombineCoreData",
-                "CarInfo"
+                "CarInfo",
+                "AppKeychain",
+                "UserDefaultsExtensions"
             ]),
     ]
 )

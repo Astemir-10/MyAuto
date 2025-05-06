@@ -14,10 +14,14 @@ public enum OBDCommandResult {
     case clearCodes
     case runTime(Double)
     case temperature(Int)
+    case coolantTemperature(Int)
     case throttlePosition(Double)
     case vin(String)
     case maf(Double)
     case dtcs([String])
     case clearDTCSuccess
+    case fuelLevel(Int)
+    case engineLoad(Int)
     case custom(String, Any)
+    
 }

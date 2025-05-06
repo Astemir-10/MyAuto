@@ -20,15 +20,15 @@ public enum HTTPMethod {
 }
 
 public enum RequestServiceHTTPParams {
-    case query([String: String])
+    case query([String: String])//, json(Decodable), jsonDictionary([String: Any])
 }
 
-protocol NetworkClient {
+public protocol NetworkClient {
     func performRequest(url: URL, method: HTTPMethod, path: [String], needLogCurl: Bool, params: RequestServiceHTTPParams, headers: [String: String], body: HTTPData?, completion: @escaping (Result<Data, Error>) -> Void)
 }
 
-final class URLSessionNetworkClient: NetworkClient {
-    static var shared = URLSessionNetworkClient()
+public final class URLSessionNetworkClient: NetworkClient {
+    public static var shared = URLSessionNetworkClient()
     private let session: URLSession
     
     init(session: URLSession = .shared) {
@@ -66,7 +66,7 @@ final class URLSessionNetworkClient: NetworkClient {
         }
     }
     
-    func performRequest(url: URL, method: HTTPMethod, path: [String], needLogCurl: Bool, params: RequestServiceHTTPParams, headers: [String: String], body: HTTPData?, completion: @escaping (Result<Data, Error>) -> Void) {
+    public func performRequest(url: URL, method: HTTPMethod, path: [String], needLogCurl: Bool, params: RequestServiceHTTPParams, headers: [String: String], body: HTTPData?, completion: @escaping (Result<Data, Error>) -> Void) {
         guard var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             return
         }
@@ -83,7 +83,6 @@ final class URLSessionNetworkClient: NetworkClient {
         guard let url = urlComponents.url else {
             return
         }
-
         
         var request = URLRequest(url: url)
     
@@ -97,6 +96,16 @@ final class URLSessionNetworkClient: NetworkClient {
                 request.httpBody = formData.data
             case .data(let data):
                 request.httpBody = data
+            case .json(let model):
+                request.allHTTPHeaderFields?["Content-Type"] = "application/json"
+
+                let encoder = JSONEncoder()
+                let data = try? encoder.encode(model)
+                request.httpBody = data
+            case .jsonDict(let dict):
+                request.allHTTPHeaderFields?["Content-Type"] = "application/json"
+                let seriolized = try? JSONSerialization.data(withJSONObject: dict)
+                request.httpBody = seriolized
             }
         }
         
@@ -110,9 +119,21 @@ final class URLSessionNetworkClient: NetworkClient {
                 return
             }
             
+            if (response as? HTTPURLResponse)?.statusCode == 401 {
+                completion(.failure(CoreError.unauthorized))
+                return
+            }
+            
             guard let data = data else {
+                if (response as? HTTPURLResponse)?.statusCode == 200 || (response as? HTTPURLResponse)?.statusCode == 201 {
+                    completion(.success(Data()))
+                    return
+                }
                 completion(.failure(NSError(domain: "NoData", code: -1, userInfo: nil)))
                 return
+            }
+            if let respone = String(data: data, encoding: .utf8), needLogCurl {
+                print(respone)
             }
             completion(.success(data))
         }

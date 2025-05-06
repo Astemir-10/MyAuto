@@ -16,9 +16,7 @@ public final class VehicleSpeedCommand: OBDCommandItem {
     public var description: String { "Vehicle Speed" }
 
     public func parse(response: String) throws -> OBDCommandResult {
-        print(response)
         let bytes = response.split(separator: " ")
-        
         // Проверяем длину и формат ответа
         guard bytes.count >= 5,
               bytes[2] == "41",

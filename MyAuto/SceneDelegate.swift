@@ -18,10 +18,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let scene = (scene as? UIWindowScene) else { return }
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(updateAuth), name: .init("updateAuth"), object: nil)
         window = .init(windowScene: scene)
-        window?.rootViewController = MainTabBarViewController()
+        window?.rootViewController = MainAuthResolver.getViewController()
         window?.makeKeyAndVisible()
+
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -52,6 +53,31 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
+    @objc
+    private func updateAuth() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else {
+                return
+            }
+            let newRootViewController = MainAuthResolver.getViewController()
+            
+            guard let snapshot = window?.snapshotView(afterScreenUpdates: true) else {
+                window?.rootViewController = newRootViewController
+                return
+            }
 
+            newRootViewController.view.addSubview(snapshot)
+            window?.rootViewController = newRootViewController
+
+            UIView.animate(withDuration: 0.4, animations: {
+                snapshot.transform = CGAffineTransform(translationX: 0, y: -snapshot.frame.height)
+                snapshot.alpha = 0
+            }, completion: { _ in
+                snapshot.removeFromSuperview()
+            })
+
+        }
+
+    }
 }
 

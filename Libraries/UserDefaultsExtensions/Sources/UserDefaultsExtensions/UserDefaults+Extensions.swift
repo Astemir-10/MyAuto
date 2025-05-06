@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 public enum UserDefaultsName: String {
-    case obdScannerId, userLongitude, userLatitude, userRegion
+    case obdScannerId, userLongitude, userLatitude, userRegion, userId
 }
 
 public final class AppDefaults {

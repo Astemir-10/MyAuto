@@ -36,7 +36,7 @@ extension TransportState: Equatable {
 
 public protocol OBDTransport {
     var transportStatePublisher: AnyPublisher<TransportState, Never> { get }
-    var connectionStatePublisher: AnyPublisher<ConnectionState, Never> { get }
+    var connectionStatePublisher: AnyPublisher<OBDModel, Never> { get }
     var isConnected: Bool { get }
     func reconnect()
     func send(command: any CommandItem) async throws -> String

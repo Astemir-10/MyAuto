@@ -24,6 +24,10 @@
 		E271DB2D2D71BA9B00B27052 /* Calculator in Frameworks */ = {isa = PBXBuildFile; productRef = E271DB2C2D71BA9B00B27052 /* Calculator */; };
 		E271DB2F2D71BDE500B27052 /* Expenses in Frameworks */ = {isa = PBXBuildFile; productRef = E271DB2E2D71BDE500B27052 /* Expenses */; };
 		E271DB312D71C11E00B27052 /* Documents in Frameworks */ = {isa = PBXBuildFile; productRef = E271DB302D71C11E00B27052 /* Documents */; };
+		E2756F922DC528D6001F7616 /* Services in Frameworks */ = {isa = PBXBuildFile; productRef = E2756F912DC528D6001F7616 /* Services */; };
+		E2765C202DC92C64009D4928 /* MainAuthResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2765C1F2DC92C64009D4928 /* MainAuthResolver.swift */; };
+		E2765C222DC92CA7009D4928 /* AppKeychain in Frameworks */ = {isa = PBXBuildFile; productRef = E2765C212DC92CA7009D4928 /* AppKeychain */; };
+		E2765C242DC92CE9009D4928 /* Authorization in Frameworks */ = {isa = PBXBuildFile; productRef = E2765C232DC92CE9009D4928 /* Authorization */; };
 		E284AE8C2CCD2E160008F5E6 /* CombineCoreData in Frameworks */ = {isa = PBXBuildFile; productRef = E284AE8B2CCD2E160008F5E6 /* CombineCoreData */; };
 		E284AE922CCD2EAD0008F5E6 /* AppData.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = E284AE902CCD2EAD0008F5E6 /* AppData.xcdatamodeld */; };
 		E28F473B2CD1CA8200AB0029 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28F473A2CD1CA8200AB0029 /* MainTabBarViewController.swift */; };
@@ -50,6 +54,7 @@
 		E226BE1C2C6CE5B800D8F389 /* RequestService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestService.swift; sourceTree = "<group>"; };
 		E226BE1E2C6CE63600D8F389 /* CarInfoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarInfoManager.swift; sourceTree = "<group>"; };
 		E226BE202C6CEA3800D8F389 /* RetryExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetryExecutor.swift; sourceTree = "<group>"; };
+		E2765C1F2DC92C64009D4928 /* MainAuthResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAuthResolver.swift; sourceTree = "<group>"; };
 		E284AE912CCD2EAD0008F5E6 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		E28F473A2CD1CA8200AB0029 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		E2CF793F2C6EB86600022D5F /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -65,6 +70,7 @@
 				E298BC9E2D81E09B00A41351 /* CarDocumentRecognizer in Frameworks */,
 				E2A3DB1E2DABEA2200A893D4 /* CarScanner in Frameworks */,
 				E22A80422CD5B17500ADEB73 /* Search in Frameworks */,
+				E2765C242DC92CE9009D4928 /* Authorization in Frameworks */,
 				E22A80402CD2F32600ADEB73 /* AnyFormatter in Frameworks */,
 				E22A803E2CD2E46100ADEB73 /* Profile in Frameworks */,
 				E2DCAEF22C9E3262006F4079 /* Architecture in Frameworks */,
@@ -77,7 +83,9 @@
 				E271DB312D71C11E00B27052 /* Documents in Frameworks */,
 				E230800B2D75DD930047F42F /* Skeleton in Frameworks */,
 				E2DCAEF82C9E32AC006F4079 /* DesignKit in Frameworks */,
+				E2765C222DC92CA7009D4928 /* AppKeychain in Frameworks */,
 				E2FBEB6A2D7610F5007F685D /* WeatherEffects in Frameworks */,
+				E2756F922DC528D6001F7616 /* Services in Frameworks */,
 				E284AE8C2CCD2E160008F5E6 /* CombineCoreData in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -108,6 +116,7 @@
 			children = (
 				E226BE052C6AAE8800D8F389 /* AppDelegate.swift */,
 				E226BE072C6AAE8800D8F389 /* SceneDelegate.swift */,
+				E2765C1F2DC92C64009D4928 /* MainAuthResolver.swift */,
 				E2B7D9232C6E50C2009D92F1 /* Routing */,
 				E226BE222C6D042500D8F389 /* Modules */,
 				E226BE192C6C226C00D8F389 /* Services */,
@@ -220,6 +229,9 @@
 				E2FBEB692D7610F5007F685D /* WeatherEffects */,
 				E298BC9D2D81E09B00A41351 /* CarDocumentRecognizer */,
 				E2A3DB1D2DABEA2200A893D4 /* CarScanner */,
+				E2756F912DC528D6001F7616 /* Services */,
+				E2765C212DC92CA7009D4928 /* AppKeychain */,
+				E2765C232DC92CE9009D4928 /* Authorization */,
 			);
 			productName = MyAuto;
 			productReference = E226BE022C6AAE8800D8F389 /* MyAuto.app */;
@@ -283,6 +295,7 @@
 				E226BE212C6CEA3800D8F389 /* RetryExecutor.swift in Sources */,
 				E28F473B2CD1CA8200AB0029 /* MainTabBarViewController.swift in Sources */,
 				E226BE1F2C6CE63600D8F389 /* CarInfoManager.swift in Sources */,
+				E2765C202DC92C64009D4928 /* MainAuthResolver.swift in Sources */,
 				E226BE1D2C6CE5B800D8F389 /* RequestService.swift in Sources */,
 				E226BE082C6AAE8800D8F389 /* SceneDelegate.swift in Sources */,
 				E2CF79402C6EB86600022D5F /* MapViewController.swift in Sources */,
@@ -558,6 +571,18 @@
 		E271DB302D71C11E00B27052 /* Documents */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Documents;
+		};
+		E2756F912DC528D6001F7616 /* Services */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Services;
+		};
+		E2765C212DC92CA7009D4928 /* AppKeychain */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AppKeychain;
+		};
+		E2765C232DC92CE9009D4928 /* Authorization */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Authorization;
 		};
 		E284AE8B2CCD2E160008F5E6 /* CombineCoreData */ = {
 			isa = XCSwiftPackageProductDependency;

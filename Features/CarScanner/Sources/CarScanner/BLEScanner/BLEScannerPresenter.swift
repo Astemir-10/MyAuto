@@ -26,7 +26,7 @@ final class BLEScannerPresenter: BLEScannerViewOutput {
     private let connector: OBDConnector
     private weak var moduleOutput: BLEScannerModuleOutput?
     private var cancellables = Set<AnyCancellable>()
-    private var items: [OBDConnectionModel] = []
+    private var items: [OBDModel] = []
     
     init(moduleOutput: BLEScannerModuleOutput, connector: OBDConnector, view: BLEScannerViewInput) {
         self.view = view

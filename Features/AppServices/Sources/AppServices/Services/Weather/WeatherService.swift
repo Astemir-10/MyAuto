@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 import Networking
+import SessionManager
 
 public protocol WeatherService {
     func requestForecast(lat: Double, lng: Double) -> AnyPublisher<WeatherData, CoreError>
@@ -51,9 +52,9 @@ public class WeatherServiceImpl: WeatherService {
         var jsonDecoder: JSONDecoder { JSONDecoder() }
     }
     
-    private let sessionManager: CombineCachedSessionManager
+    private let sessionManager: CombineSessionManager
     
-    public init(sessionManager: CombineCachedSessionManager) {
+    public init(sessionManager: CombineSessionManager) {
         self.sessionManager = sessionManager
     }
     

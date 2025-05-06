@@ -12,7 +12,7 @@
 		<key>CarScannerCore.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>4</integer>
+			<integer>16</integer>
 		</dict>
 		<key>Networking-Package.xcscheme_^#shared#^_</key>
 		<dict>

@@ -17,6 +17,7 @@ let package = Package(
         .package(name: "CombineCoreData", path: "../../CombineCoreData"),
         .package(name: "LocationManager", path: "../../LocationManager"),
         .package(name: "AppFileManager", path: "../../AppFileManager"),
+        .package(name: "AppKeychain", path: "../../AppKeychain"),
 
     ],
     targets: [
@@ -27,7 +28,8 @@ let package = Package(
                 "AppServices",
                 "CombineCoreData",
                 "LocationManager",
-                "AppFileManager"
+                "AppFileManager",
+                "AppKeychain"
             ]),
     ]
 )

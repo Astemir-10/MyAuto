@@ -320,6 +320,7 @@ public struct AppImages {
         public let document = SFIcon(name: "doc")
         public let dollar = SFIcon(name: "dollarsign")
         public let user = SFIcon(name: "person")
+        public let personFill = SFIcon(name: "person.fill")
         
         public let enginePower = SFIcon(name: "bolt")
         public let distance = SFIcon(name: "road.lanes")
@@ -330,6 +331,7 @@ public struct AppImages {
         public let timer = SFIcon(name: "timer")
         public let car = SFIcon(name: "car")
         public let carSide = SFIcon(name: "car.side")
+        public let services = SFIcon(name: "rectangle.grid.2x2")
         public let add = SFIcon(name: "plus.circle")
         public let analytic = SFIcon(name: "chart.xyaxis.line")
         

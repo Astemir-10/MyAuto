@@ -7,6 +7,7 @@
 
 import Foundation
 import Networking
+import SessionManager
 import Combine
 
 public protocol GeocoderService {
@@ -34,9 +35,9 @@ public final class GeocoderServiceImpl: GeocoderService {
         }
     }
     
-    private let sessionManager: CombineCachedSessionManager
+    private let sessionManager: CombineSessionManager
     
-    public init(sessionManager: CombineCachedSessionManager) {
+    public init(sessionManager: CombineSessionManager) {
         self.sessionManager = sessionManager
     }
     

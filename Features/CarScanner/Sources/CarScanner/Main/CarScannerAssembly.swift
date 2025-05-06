@@ -7,6 +7,7 @@
 
 import UIKit
 import CarScannerCore
+import DesignKit
 
 public enum CarScannerAssembly {
     public static func assembly() -> UIViewController {
@@ -16,5 +17,14 @@ public enum CarScannerAssembly {
         let presenter = CarScannerPresenter(view: vc, router: router)
         vc.output = presenter
         return vc
+    }
+    
+    public static func assemblyWithNavigation() -> UIViewController {
+        let vc = CarScannerViewController()
+        let router = CarScannerRouter()
+        router.transitionHandler = vc
+        let presenter = CarScannerPresenter(view: vc, router: router)
+        vc.output = presenter
+        return AppNavigationController(rootViewController: vc)
     }
 }

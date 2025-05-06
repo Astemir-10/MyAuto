@@ -11,15 +11,17 @@ import Foundation
 /// PID: 0105
 /// Формула: A - 40
 /// Единицы измерения: °C
-final class CoolantTempCommand: OBDCommandItem {
-    var command: String { "0105" }
-    var description: String { "Engine Coolant Temperature" }
+public final class CoolantTempCommand: OBDCommandItem {
+    public var command: String { "0105" }
+    public var description: String { "Engine Coolant Temperature" }
 
-    func parse(response: String) throws -> OBDCommandResult {
+    public func parse(response: String) throws -> OBDCommandResult {
         let bytes = response.split(separator: " ")
         guard bytes.count >= 3 else { throw OBDParsingError.invalidResponse }
         
         let temp = Int(bytes[2], radix: 16)! - 40
-        return .temperature(temp)
+        return .coolantTemperature(temp)
     }
+    
+    public init() {}
 }

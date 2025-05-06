@@ -76,23 +76,34 @@ public final class ProfileViewController: CommonViewController {
         return btn
     }()
     
-    private lazy var carInfoView = CarInfoView()
+    private lazy var logoutButton: Button = {
+        let btn = Button().forAutoLayout()
+        btn.primaryText = "Выйти"
+        return btn
+    }()
     
+    private lazy var carInfoView = CarInfoView()
+        
     var output: ProfileViewOutput!
 
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         output.viewDidLoad()
-        view.addSubviews(carInfoView, addCarButton)
+        view.addSubviews(logoutButton)
         
         carInfoView.addConstraintToSuperView([.top(20), .leading(20), .trailing(-20)], withSafeArea: true)
         addCarButton.addConstraintToSuperView([.centerX(0)])
-        addCarButton.topAnchor.constraint(equalTo: carInfoView.bottomAnchor, constant: 30).activated()
-        
+
         addCarButton.addAction(.init(handler: { [weak self] _ in
             self?.output.didTapAddButton()
         }), for: .touchUpInside)
+        
+        logoutButton.addAction(.init(handler: { [weak self] _ in
+            self?.output.didTapLogout()
+        }), for: .touchUpInside)
+        
+        logoutButton.addConstraintToSuperView([.centerX(0), .centerY(0)])
     }
 }
 

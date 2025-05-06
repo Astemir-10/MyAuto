@@ -11,7 +11,7 @@ import Combine
 
 public protocol OBDSessionManager {
     var transportStatePublisher: AnyPublisher<TransportState, Never> { get }
-    var connectionStatePublisher: AnyPublisher<ConnectionState, Never> { get }
+    var connectionStatePublisher: AnyPublisher<OBDModel, Never> { get }
     
     func getConnector() -> OBDConnector?
     func executeOBDCommand<T: OBDCommandItem>(_ item: T) async throws -> OBDCommandResult
@@ -31,7 +31,7 @@ final class OBDSessionManagerImpl: OBDSessionManager {
         transport.transportStatePublisher
     }
     
-    var connectionStatePublisher: AnyPublisher<ConnectionState, Never> {
+    var connectionStatePublisher: AnyPublisher<OBDModel, Never> {
         transport.connectionStatePublisher
     }
     

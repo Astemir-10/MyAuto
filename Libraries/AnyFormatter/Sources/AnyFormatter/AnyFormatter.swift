@@ -10,7 +10,7 @@ import Foundation
 class AnyFormatter {}
 
 public enum MeasurementUnit {
-    case currency, fuelPrice, mileage, distance, travelTime, time, horsepower, speed, liters, temperature
+    case currency, fuelPrice, mileage, distance, travelTime, time, horsepower, speed, liters, temperature, rpm
 }
 
 extension NumberFormatter {
@@ -92,6 +92,8 @@ public extension Double {
             } else {
                 return "\(Int(self)) °C"
             }
+        case .rpm:
+            return "\(Int(self)) об/мин"
         }
     }
 }

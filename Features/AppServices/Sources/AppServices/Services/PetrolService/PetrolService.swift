@@ -7,6 +7,7 @@
 
 import Foundation
 import Networking
+import SessionManager
 import Combine
 import Extensions
 
@@ -14,13 +15,17 @@ extension URL {
     enum Path: String {
         case petrol, regions, prices
         case weather, getWeather, getHourlyWeather
+        case check, car, fines, driver, driverCard
+        case auth, login, logout, registration, confirm, refreshToken
     }
     
-    func appendApiPath(_ paths: Path...) -> URL {
+    func appendApiPath(_ paths: Path..., needGateway: Bool = true) -> URL {
         guard var components = URLComponents(string: self.absoluteString) else {
             fatalError("Invalid URL")
         }
-        
+        if needGateway {
+            components.path.append("/gateway")
+        }
         paths.forEach({
             components.path.append("/" + $0.rawValue)
         })
@@ -70,9 +75,9 @@ public struct Location {
 
 public final class PetrolServiceImpl: PetrolService {
     
-    private let sessionManager: CombineCachedSessionManager
+    private let sessionManager: CombineSessionManager
     
-    public init(sessionManager: CombineCachedSessionManager) {
+    public init(sessionManager: CombineSessionManager) {
         self.sessionManager = sessionManager
     }
     

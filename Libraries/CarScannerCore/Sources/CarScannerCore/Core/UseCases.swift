@@ -12,8 +12,11 @@ public enum ConnectionState {
     case disconnected
     case connecting
     case connected
+    case ready
     case disconnecting
     case error(Error)
+    
+    
 }
 
 protocol OBDCommandExecutor {

@@ -38,6 +38,8 @@ extension ConnectionState: Equatable {
             return true
         case (.error, .error):
             return true // или false, если ошибки важно различать
+        case (.ready, .ready):
+            return true
         default:
             return false
         }

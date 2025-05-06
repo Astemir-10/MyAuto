@@ -45,6 +45,10 @@ public extension UIView {
         self.addConstraintToSuperView([.top(0), .leading(0), .trailing(0), .bottom(0)], withSafeArea: withSafeArea)
     }
     
+    func addFourNullConstraintToSuperView(constant: CGFloat = 0, withSafeArea: Bool = false){
+        self.addConstraintToSuperView([.top(constant), .leading(constant), .trailing(-constant), .bottom(-constant)], withSafeArea: withSafeArea)
+    }
+    
     @discardableResult
     func addConstraintForCloseButton() -> [NSLayoutConstraint] {
         guard let superview else { return [] }

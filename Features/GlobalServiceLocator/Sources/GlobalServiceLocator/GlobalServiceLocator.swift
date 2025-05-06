@@ -8,9 +8,11 @@
 import Foundation
 import AppServices
 import Networking
+import SessionManager
 import CombineCoreData
 import LocationManager
 import AppFileManager
+import AppKeychain
 
 public final class GlobalServiceLocator {
     public static let shared = GlobalServiceLocator()
@@ -117,6 +119,45 @@ public final class GlobalServiceLocator {
             let appFileManager = AppFileManager()
             self.appFileManager = appFileManager
             return appFileManager
+        }
+    }
+    
+    // MARK: CheckService
+    public var checkService: CheckService?
+    
+    public func getService() -> CheckService {
+        if let checkService {
+            return checkService
+        } else {
+            let checkService = CheckServiceImpl(sessionManager: getService())
+            self.checkService = checkService
+            return checkService
+        }
+    }
+    
+    // MARK: AuthorizationService
+    public var authorizationService: AuthorizationService?
+    
+    public func getService() -> AuthorizationService {
+        if let authorizationService {
+            return authorizationService
+        } else {
+            let authorizationService = AuthorizationServiceImpl(sessionManager: getService())
+            self.authorizationService = authorizationService
+            return authorizationService
+        }
+    }
+    
+    // MARK: Keychain
+    public var appKeychain: AppKeychain?
+    
+    public func getService() -> AppKeychain {
+        if let appKeychain {
+            return appKeychain
+        } else {
+            let appKeychain = AppKeychainImpl(service: "com.myauto.MyAuto")
+            self.appKeychain = appKeychain
+            return appKeychain
         }
     }
 }
